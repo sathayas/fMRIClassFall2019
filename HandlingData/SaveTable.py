@@ -10,7 +10,7 @@ ptData = pd.read_csv(fileTable, sep='\t')
 
 
 # Sorting by age in descending order
-ptData.sort_values(by='age', inplace=True)
+ptData.sort_values(by='age', ascending=False, inplace=True)
 
 # output file name
 fileOut = os.path.join(dataDir,'sorted_D.csv')
