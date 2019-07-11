@@ -16,4 +16,4 @@ ptData.sort_values(by='age', ascending=False, inplace=True)
 fileOut = os.path.join(dataDir,'sorted_D.csv')
 
 # selecting observations with gender=D, saving to a CSV file
-ptData[ptData.gender=='D'].to_csv(fileOut)
+ptData[ptData.gender=='D'].to_csv(fileOut, index=False)
