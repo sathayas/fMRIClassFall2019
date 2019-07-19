@@ -14,9 +14,6 @@ subjList = layout.get_subjects()
 # sessions
 sesList = layout.get_sessions()
 
-# modalities
-modList = layout.get_modalities()
-
 # tasks
 taskList = layout.get_tasks()
 
