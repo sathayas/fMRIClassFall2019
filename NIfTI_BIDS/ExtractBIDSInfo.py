@@ -1,5 +1,5 @@
 import os
-from bids.grabbids import BIDSLayout
+from bids.layout import BIDSLayout
 
 
 # Directory where your data set resides.
