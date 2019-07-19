@@ -27,12 +27,12 @@ fMRI_sub01 = layout.get(subject='01',
                         suffix='bold',
                         extension=['nii', 'nii.gz'],
                         return_type='file')
-                        
+
 # Lets focus on test session
 fMRI_sub01_test = layout.get(subject='01',
                              session='test',
-                             type='bold',
-                             extensions=['nii', 'nii.gz'],
+                             suffix='bold',
+                             extension=['nii', 'nii.gz'],
                              return_type='file')
 
 
@@ -40,11 +40,12 @@ fMRI_sub01_test = layout.get(subject='01',
 # A list of files associated with the covert verb generation
 # (covertverbgeneration) task
 list_covertverbgen = layout.get(task='covertverbgeneration',
-                                extensions=['tsv','json'],
+                                extension=['tsv','json'],
                                 return_type='file')
 
 
 # a list of T1w images from everybody
-listT1w = layout.get(type='T1w',
+listT1w = layout.get(suffix='T1w',
                      extensions=['nii','nii.gz'],
                      return_type='file')
+                     
