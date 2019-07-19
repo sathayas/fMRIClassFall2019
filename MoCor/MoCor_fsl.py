@@ -11,3 +11,28 @@ dataDir = '/tmp/Data/ds102'
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
+
+# an fMRI image from one of the subjects (run 1 only)
+imagefMRI = layout.get(subject='26',
+                       run='1',
+                       suffix='bold',
+                       extension='nii.gz',
+                       return_type='file')[0]
+
+# Output directory
+outDir = os.path.join(dataDir, 'WorkflowOutput')
+
+
+# node to skip dummy scans
+extract = Node(fsl.ExtractROI(in_file=imagefMRI,  # input image
+                              t_min=4,            # first 4 volumes are deleted
+                              t_size=-1),
+               name="extract")
+
+# creating motion correction node
+mcflirt = Node(fsl.MCFLIRT(save_rms=True),   # saving displacement parameters
+               name="mcflirt")
+
+# creating datasink to collect outputs
+datasink = Node(DataSink(base_directory=outDir),
+                name='datasink')
