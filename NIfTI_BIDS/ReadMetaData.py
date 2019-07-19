@@ -1,21 +1,20 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-from bids.grabbids import BIDSLayout
+from bids.layout import BIDSLayout
 
-# Directory where your data set resides. This needs to be customized.
-# For this exercise, we use ds102 data set
-dataDir = '/home/satoru/Teaching/fMRI_Fall_2018/Data/ds102'
+# Directory where your data set resides.
+dataDir = '/tmp/Data/ds102'
 
-# Creating the layout objects 
+# Creating the layout objects
 layout = BIDSLayout(dataDir)
 
 
 # PARTICIPANT INFORMATION
 
 # reading in participant info (tsv read as pandas data frame)
-file_participants = layout.get(type='participants',
-                               extensions='tsv',
+file_participants = layout.get(suffix='participants',
+                               extension='tsv',
                                return_type='file')[0]
 subjInfo = pd.read_csv(file_participants, delimiter='\t')
 
@@ -26,7 +25,7 @@ subjInfo = pd.read_csv(file_participants, delimiter='\t')
 
 # Images for sub-01
 listImages_sub01 = layout.get(subject='01',
-                              extensions=['nii', 'nii.gz'],
+                              extension=['nii', 'nii.gz'],
                               return_type='file')
 
 
@@ -38,8 +37,8 @@ metafMRI = layout.get_metadata(listImages_sub01[1])
 
 
 # locations of meta data files (T1w)
-metalocT1w = layout.get(type='T1w',
-                        extensions='json',
+metalocT1w = layout.get(suffix='T1w',
+                        extension='json',
                         return_type='file')
 
 
@@ -49,8 +48,8 @@ metalocT1w = layout.get(type='T1w',
 # Task events tsv file for sub-01, run-1
 taskTSV = layout.get(subject='01',
                      run='1',
-                     type='events',
-                     extensions='tsv',
+                     suffix='events',
+                     extension='tsv',
                      return_type='file')[0]
 
 # reading the task info (as pandas data frame)
