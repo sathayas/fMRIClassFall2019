@@ -24,10 +24,10 @@ runList = layout.get_runs()
 
 # List of all fMRI data for subject 01
 fMRI_sub01 = layout.get(subject='01',
-                        type='bold',
-                        extensions=['nii', 'nii.gz'],
+                        suffix='bold',
+                        extension=['nii', 'nii.gz'],
                         return_type='file')
-
+                        
 # Lets focus on test session
 fMRI_sub01_test = layout.get(subject='01',
                              session='test',
