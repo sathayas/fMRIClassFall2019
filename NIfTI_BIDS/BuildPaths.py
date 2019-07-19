@@ -1,9 +1,8 @@
 import os
-from bids.grabbids import BIDSLayout
+from bids.layout import BIDSLayout
 
-# Directory where your data set resides. This needs to be customized.
-# For this exercise, lets use ds114 data set
-dataDir = '/home/satoru/Teaching/fMRI_Fall_2018/Data/ds114'
+# Directory where your data set resides.
+dataDir = '/tmp/Data/ds114'
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
