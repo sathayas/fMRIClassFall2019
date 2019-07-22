@@ -60,3 +60,7 @@ img=mpimg.imread(os.path.join(outDir,"moCor","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
+
+
+# running the workflow
+moCor.run()
