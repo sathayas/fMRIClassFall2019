@@ -38,6 +38,8 @@ mcflirt = Node(fsl.MCFLIRT(save_rms=True,
 datasink = Node(DataSink(base_directory=os.path.join(outDir,'Results')),
                 name='datasink')
 
+
+
 # creating a workflow
 moCor = Workflow(name="MoCor", base_dir=outDir)
 
@@ -45,10 +47,9 @@ moCor = Workflow(name="MoCor", base_dir=outDir)
 moCor.connect(extract,'roi_file', mcflirt, 'in_file')
 
 # output to datasink
-moCor.connect(mcflirt,'out_file', datasink, 'moCorResults.@mcfMRI')  # corrected fMRI
-moCor.connect(mcflirt,'par_file', datasink, 'moCorResults.@mcPar')   # motion parameter
-moCor.connect(mcflirt,'rms_files', datasink, 'moCorResults.@mcRMS')   # relative motion
-
+moCor.connect(mcflirt,'out_file', datasink, 'out_file')  # corrected fMRI
+moCor.connect(mcflirt,'par_file', datasink, 'par_file')   # motion parameter
+moCor.connect(mcflirt,'rms_files', datasink, 'rms_files')   # relative motion
 
 
 # writing out graph
