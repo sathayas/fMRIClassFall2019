@@ -55,8 +55,8 @@ moCor.connect(mcflirt,'rms_files', datasink, 'moCorResults.@mcRMS')   # relative
 moCor.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # showing the graph
-plt.figure(figsize=[10,10])
-img=mpimg.imread(os.path.join(outDir,"MoCorFSL","graph_orig.png"))
+plt.figure(figsize=[4,4])
+img=mpimg.imread(os.path.join(outDir,"moCor","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
