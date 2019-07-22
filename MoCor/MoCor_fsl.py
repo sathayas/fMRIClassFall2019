@@ -30,13 +30,13 @@ extract = Node(fsl.ExtractROI(in_file=imagefMRI,  # input image
                name="extract")
 
 # creating motion correction node
-mcflirt = Node(fsl.MCFLIRT(save_rms=True),   # saving displacement parameters
+mcflirt = Node(fsl.MCFLIRT(save_rms=True,
+                           save_plots=True),   # saving displacement parameters
                name="mcflirt")
 
 # creating datasink to collect outputs
-datasink = Node(DataSink(base_directory=outDir),
+datasink = Node(DataSink(base_directory=os.path.join(outDir,'Results')),
                 name='datasink')
-
 
 # creating a workflow
 moCor = Workflow(name="MoCor", base_dir=outDir)
