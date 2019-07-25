@@ -47,3 +47,31 @@ wf.connect(fslBET, "out_file", fslFLIRT, "in_file")
 
 # running the workflow
 wf.run()
+
+
+
+
+
+# Skull-stripped image
+imageT1BET = os.path.join(os.path.join(outDir,'WorkflowOutput'),
+                          'sub-26_T1w_brain.nii.gz')
+
+# displaying image (skull-sripped)
+plot_anat(imageT1BET,
+          display_mode='ortho',
+          dim=-1,
+          draw_cross=True,
+          annotate=True)
+
+# interactive visualization (skull-sripped)
+view_img(imageT1BET, bg_img=False, cmap='gray', symmetric_cmap=False,
+         black_bg=True)
+
+
+
+# displaying image (original T1)
+plot_anat(imageT1,
+          display_mode='ortho',
+          dim=-1,
+          draw_cross=True,
+          annotate=True)
