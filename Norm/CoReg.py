@@ -41,7 +41,8 @@ extract = Node(fsl.ExtractROI(in_file=imagefMRI,  # input image
 
 # creating motion correction node
 mcflirt = Node(fsl.MCFLIRT(save_rms=True,
-                           save_plots=True),   # saving displacement parameters
+                           save_plots=True,
+                           mean_vol=True),   # saving displacement parameters
                name="mcflirt")
 
 # creating co-registration node (estimating the coregistration parameters)
