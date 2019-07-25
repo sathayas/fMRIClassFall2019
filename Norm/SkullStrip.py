@@ -20,3 +20,30 @@ imageT1 = layout.get(subject='26',
                        suffix='T1w',
                        extension='nii.gz',
                        return_type='file')[0]
+
+# template image (from FSL)
+fMNI = '/usr/local/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
+
+# Output directory
+outDir = os.path.join(dataDir, 'WorkflowOutput')
+
+
+
+# Skullstrip process node
+fslBET = Node(fsl.BET(in_file=imageT1),
+              name="fslBET")
+
+# DataSink to collect intermediate outputs
+datasink = Node(DataSink(base_directory=outDir),
+                name='datasink')
+
+
+# Creating a workflow object
+wf = Workflow(name="fslNorm", base_dir=outDir)
+
+# connecting nodes as a workflow
+wf.connect(fslBET, "out_file", fslFLIRT, "in_file")
+
+
+# running the workflow
+wf.run()
