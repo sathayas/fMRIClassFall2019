@@ -76,8 +76,11 @@ coReg.connect(mcflirt, 'mean_img', coreg, 'in_file')
 coReg.connect(mcflirt, 'out_file', applywarp, 'in_file')
 # and passing on the rigid-body transformation parameters from first FLIRT
 coReg.connect(coreg, 'out_matrix_file', applywarp,'in_matrix_file')
+
 # second FLIRT node to data sink
 coReg.connect(applywarp, 'out_file', datasink, 'CoRegfMRI')
+# second motion corredted mean fMRI to data sink
+coReg.connect(mcflirt, 'mean_img', datasink, 'MoCorMean')
 
 
 
@@ -131,3 +134,11 @@ display = plot_anat(mean_imageCoRegfMRI,
 
 # adding edges from the corresponding T1w image
 display.add_edges(imageT1)
+
+
+
+
+# Just for fun; original fMRI and T1 -- how different they are
+# mean fMRI from motion corrected
+imageCoRegfMRI = os.path.join(os.path.join(outDir,'moCor'),
+                              'sub-26_task-flanker_run-1_bold_roi_mcf_flirt.nii.gz')
