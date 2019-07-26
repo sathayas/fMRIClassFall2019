@@ -55,3 +55,24 @@ coreg = Node(fsl.FLIRT(reference=imageT1,  # target: T1-weighted
 applywarp = Node(fsl.FLIRT(reference=imageT1,
                            apply_isoxfm=4),  # forcing the voxel size = 4mm
                  name="applywarp")
+
+
+# creating datasink to collect outputs
+datasink = Node(DataSink(base_directory=outDir),
+                name='datasink')
+
+
+
+# creating a workflow
+coReg = Workflow(name="coReg", base_dir=outDir)
+
+# and connecting nodes
+coReg.connect(extract,'roi_file', mcflirt, 'in_file')
+# mcflirt mean image as input for the first FLIRT
+coReg.connect(mcflirt, 'mean_img', coreg, 'in_file')
+# mcflirt fMRI as input for the second FLIRT
+coReg.connect(mcflirt, 'out_file', applywarp, 'in_file')
+# and passing on the rigid-body transformation parameters from first FLIRT
+coReg.connect(coreg, 'out_matrix_file', applywarp,'in_matrix_file')
+# second FLIRT node to data sink
+coReg.connect(applywarp, 'out_file', datasink, 'CoRegfMRI')
