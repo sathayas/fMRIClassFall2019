@@ -4,6 +4,7 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
+from nilearn import image
 from nilearn.plotting import plot_anat, plot_epi, view_img
 from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
@@ -92,5 +93,41 @@ plt.show()
 
 
 
-# running the workflow
+# running the workflowhaxby_anat_filename
 coReg.run()
+
+
+
+# examining the coregistration results
+# Coregistered fMRI
+imageCoRegfMRI = os.path.join(os.path.join(outDir,'CoRegfMRI'),
+                              'sub-26_task-flanker_run-1_bold_roi_mcf_flirt.nii.gz')
+# mean of the co-registered fMRI
+mean_imageCoRegfMRI = image.mean_img(imageCoRegfMRI)
+
+
+# displaying the mean of the co-registered fMRI (axial)
+display = plot_anat(mean_imageCoRegfMRI,
+                    display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageT1)
+
+
+# displaying the mean of the co-registered fMRI (sagittal)
+display = plot_anat(mean_imageCoRegfMRI,
+                    display_mode='x',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageT1)
+
+
+# displaying the mean of the co-registered fMRI (coronal)
+display = plot_anat(mean_imageCoRegfMRI,
+                    display_mode='y',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageT1)
