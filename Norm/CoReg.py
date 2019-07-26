@@ -2,6 +2,7 @@ import os
 import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nilearn.plotting import plot_anat, plot_epi, view_img
 from nipype import Node, Workflow  # components to construct workflow
@@ -76,3 +77,20 @@ coReg.connect(mcflirt, 'out_file', applywarp, 'in_file')
 coReg.connect(coreg, 'out_matrix_file', applywarp,'in_matrix_file')
 # second FLIRT node to data sink
 coReg.connect(applywarp, 'out_file', datasink, 'CoRegfMRI')
+
+
+
+# writing out graph
+coReg.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
+
+# showing the graph
+plt.figure(figsize=[10,10])
+img=mpimg.imread(os.path.join(outDir,"coReg","graph_orig.png"))
+imgplot = plt.imshow(img)
+plt.axis('off')
+plt.show()
+
+
+
+# running the workflow
+coReg.run()
