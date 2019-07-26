@@ -140,5 +140,12 @@ display.add_edges(imageT1)
 
 # Just for fun; original fMRI and T1 -- how different they are
 # mean fMRI from motion corrected
-imageCoRegfMRI = os.path.join(os.path.join(outDir,'moCor'),
-                              'sub-26_task-flanker_run-1_bold_roi_mcf_flirt.nii.gz')
+imageMoCorfMRI = os.path.join(os.path.join(outDir,'MoCorMean'),
+                              'sub-26_task-flanker_run-1_bold_roi_mcf.nii.gz_mean_reg.nii.gz')
+# displaying the mean of the co-registered fMRI (axial)
+display = plot_anat(imageMoCorfMRI,
+                    display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageT1)
