@@ -84,7 +84,7 @@ coReg.connect(applywarp, 'out_file', datasink, 'CoRegfMRI')
 coReg.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # showing the graph
-plt.figure(figsize=[10,10])
+plt.figure(figsize=[6,6])
 img=mpimg.imread(os.path.join(outDir,"coReg","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
