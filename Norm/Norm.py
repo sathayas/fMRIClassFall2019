@@ -5,17 +5,16 @@ from nipype.interfaces.io import DataSink  # datasink
 from bids.grabbids import BIDSLayout  # BIDSLayout object to specify file(s)
 
 
-# Directory where your data set resides. This needs to be customized
-#dataDir = '/home/satoru/Teaching/fMRI_Fall_2018/Data/ds102'
-dataDir = '/Users/sh45474/Documents/Teaching/fMRI_Fall_2018/Data/ds102'
+# Directory where your data set resides.
+dataDir = '/tmp/Data/ds102'
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
 
 # an T1 weighted image from one of the subjects
-imageT1 = layout.get(subject='26', 
-                     type='T1w', 
-                     extensions='nii.gz',
+imageT1 = layout.get(subject='26',
+                     suffix='T1w',
+                     extension='nii.gz',
                      return_type='file')[0]
 
 # template image (from FSL)
@@ -26,7 +25,7 @@ outDir = os.path.join(dataDir, 'WorkflowOutput')
 
 
 # Skullstrip process node
-fslBET = Node(fsl.BET(in_file=imageT1), 
+fslBET = Node(fsl.BET(in_file=imageT1),
               name="fslBET")
 
 
@@ -52,7 +51,7 @@ wf.connect([(fslBET, fslFNIRT, [('out_file', 'in_file')]),
 wf.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # DataSink to collect intermediate outputs
-datasink = Node(DataSink(base_directory=outDir), 
+datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
 # adding datasink
