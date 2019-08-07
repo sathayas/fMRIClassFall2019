@@ -72,4 +72,4 @@ plt.axis('off')
 plt.show()
 
 # running the workflow
-wf.run()
+wfNormT1.run()
