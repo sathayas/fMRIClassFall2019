@@ -1,5 +1,6 @@
 import os
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
@@ -65,7 +66,7 @@ wf.write_graph(graph2use='orig', dotfilename='graph_orig_datasink.dot')
 
 # showing the graph
 plt.figure(figsize=[6,6])
-img=mpimg.imread(os.path.join(outDir,"coReg","graph_orig.png"))
+img=mpimg.imread(os.path.join(outDir,"wfNormT1","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
