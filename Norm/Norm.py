@@ -20,7 +20,7 @@ imageT1 = layout.get(subject='26',
                      return_type='file')[0]
 
 # template image (from FSL)
-fMNI = '/usr/local/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
+fMNI = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
 
 # Output directory
 outDir = os.path.join(dataDir, 'WorkflowOutput')
