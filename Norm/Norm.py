@@ -1,4 +1,5 @@
 import os
+import matplotlib.pyplot as plt
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
@@ -38,30 +39,36 @@ fslFLIRT = Node(fsl.FLIRT(reference=fMNI,
 fslFNIRT = Node(fsl.FNIRT(ref_file=fMNI),
                 name='fslFNIRT')
 
-# Creating a workflow object
-wf = Workflow(name="fslNorm", base_dir=outDir)
-
-# connecting nodes as a workflow
-wf.connect(fslBET, "out_file", fslFLIRT, "in_file")
-wf.connect([(fslBET, fslFNIRT, [('out_file', 'in_file')]),
-            (fslFLIRT,fslFNIRT, [('out_matrix_file', 'affine_file')])])
-
-
-# writing out graphs
-wf.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # DataSink to collect intermediate outputs
 datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
+
+
+# Creating a workflow object
+wfNormT1 = Workflow(name="wfNormT1", base_dir=outDir)
+
+# connecting nodes as a workflow
+wfNormT1.connect(fslBET, "out_file", fslFLIRT, "in_file")
+wfNormT1.connect(fslBET, 'out_file', fslFNIRT,'in_file')
+wfNormT1.connect(fslFLIRT, 'out_matrix_file', fslFNIRT, 'affine_file')
+
 # adding datasink
-wf.connect(fslFLIRT, 'out_file', datasink, 'NormFSL.@flirt')
-wf.connect(fslFNIRT, 'warped_file', datasink, 'NormFSL.@fnirt')
+wfNormT1.connect(fslFLIRT, 'out_file', datasink, 'NormLinear')
+wfNormT1.connect(fslFNIRT, 'warped_file', datasink, 'NormNonLinear')
+
 
 
 # writing out graphs
 wf.write_graph(graph2use='orig', dotfilename='graph_orig_datasink.dot')
 
+# showing the graph
+plt.figure(figsize=[6,6])
+img=mpimg.imread(os.path.join(outDir,"coReg","graph_orig.png"))
+imgplot = plt.imshow(img)
+plt.axis('off')
+plt.show()
 
 # running the workflow
 wf.run()
