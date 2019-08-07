@@ -4,7 +4,7 @@ import matplotlib.image as mpimg
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
-from bids.grabbids import BIDSLayout  # BIDSLayout object to specify file(s)
+from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
 
 
 # Directory where your data set resides.
