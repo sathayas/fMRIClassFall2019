@@ -62,7 +62,7 @@ wfNormT1.connect(fslFNIRT, 'warped_file', datasink, 'NormNonLinear')
 
 
 # writing out graphs
-wf.write_graph(graph2use='orig', dotfilename='graph_orig_datasink.dot')
+wfNormT1.write_graph(graph2use='orig', dotfilename='graph_orig_datasink.dot')
 
 # showing the graph
 plt.figure(figsize=[6,6])
