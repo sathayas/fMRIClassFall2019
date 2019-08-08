@@ -52,7 +52,7 @@ imageT1 = layout.get(subject='26',
 
 # template image (from FSL)
 fMNI = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
-
+fMNISingle =
 # Output directory
 outDir = os.path.join(dataDir, 'WorkflowOutput')
 
@@ -122,7 +122,7 @@ display.add_edges(fMNI)
 # displaying the normalized T1 (sagittal)
 display = plot_anat(imageNormLinT1,
                     display_mode='x',
-                    cut_coords=5)
+                    cut_coords=[-15,0,20,40])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
@@ -130,7 +130,7 @@ display.add_edges(fMNI)
 # displaying the normalized T1 (coronal)
 display = plot_anat(imageNormLinT1,
                     display_mode='y',
-                    cut_coords=5)
+                    cut_coords=[-60,-30,0,30])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
@@ -145,7 +145,7 @@ imageNormNonLinT1 = os.path.join(os.path.join(outDir,'NormNonLinear'),
 # displaying the normalized T1 (axial)
 display = plot_anat(imageNormNonLinT1,
                     display_mode='z',
-                    cut_coords=5)
+                    cut_coords=[-15,0,20,40])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
@@ -153,7 +153,7 @@ display.add_edges(fMNI)
 # displaying the normalized T1 (sagittal)
 display = plot_anat(imageNormNonLinT1,
                     display_mode='x',
-                    cut_coords=5)
+                    cut_coords=[-40,-20,20,40])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
@@ -161,7 +161,7 @@ display.add_edges(fMNI)
 # displaying the normalized T1 (coronal)
 display = plot_anat(imageNormNonLinT1,
                     display_mode='y',
-                    cut_coords=5)
+                    cut_coords=[-60,-30,0,30])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
