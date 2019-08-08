@@ -5,6 +5,8 @@ import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
 from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
+from nilearn import image
+from nilearn.plotting import plot_anat, view_img
 
 
 # Directory where your data set resides.
@@ -73,3 +75,17 @@ plt.show()
 
 # running the workflow
 wfNormT1.run()
+
+
+# examining the normalization results
+# Normalized T1
+imageNormLinT1 = os.path.join(os.path.join(outDir,'NormLinear'),
+                              'sub-26_T1w_brain_flirt.nii.gz')
+
+# displaying the normalized T1 (axial)
+display = plot_anat(imageNormLinT1,
+                    display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
