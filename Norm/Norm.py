@@ -114,7 +114,7 @@ imageNormLinT1 = os.path.join(os.path.join(outDir,'NormLinear'),
 # displaying the normalized T1 (axial)
 display = plot_anat(imageNormLinT1,
                     display_mode='z',
-                    cut_coords=5)
+                    cut_coords=[-15,0,20,40])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
