@@ -122,7 +122,7 @@ display.add_edges(fMNI)
 # displaying the normalized T1 (sagittal)
 display = plot_anat(imageNormLinT1,
                     display_mode='x',
-                    cut_coords=[-15,0,20,40])
+                    cut_coords=[-40,-20,20,40])
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
