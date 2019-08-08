@@ -107,14 +107,30 @@ wfNormT1.run()
 
 
 # examining the normalization results
-# Normalized T1
+# Linear normalized T1
 imageNormLinT1 = os.path.join(os.path.join(outDir,'NormLinear'),
                               'sub-26_T1w_brain_flirt.nii.gz')
 
 # displaying the normalized T1 (axial)
 display = plot_anat(imageNormLinT1,
                     display_mode='z',
-                    cut_coords=6)
+                    cut_coords=5)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
+
+# displaying the normalized T1 (sagittal)
+display = plot_anat(imageNormLinT1,
+                    display_mode='x',
+                    cut_coords=5)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
+
+# displaying the normalized T1 (coronal)
+display = plot_anat(imageNormLinT1,
+                    display_mode='y',
+                    cut_coords=5)
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
