@@ -134,3 +134,34 @@ display = plot_anat(imageNormLinT1,
 
 # adding edges from the MNI template image
 display.add_edges(fMNI)
+
+
+
+# examining the normalization results
+# Linear & non-linear normalized T1
+imageNormNonLinT1 = os.path.join(os.path.join(outDir,'NormNonLinear'),
+                                 'sub-26_T1w_brain_warped.nii.gz')
+
+# displaying the normalized T1 (axial)
+display = plot_anat(imageNormNonLinT1,
+                    display_mode='z',
+                    cut_coords=5)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
+
+# displaying the normalized T1 (sagittal)
+display = plot_anat(imageNormNonLinT1,
+                    display_mode='x',
+                    cut_coords=5)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
+
+# displaying the normalized T1 (coronal)
+display = plot_anat(imageNormNonLinT1,
+                    display_mode='y',
+                    cut_coords=5)
+
+# adding edges from the MNI template image
+display.add_edges(fMNI)
