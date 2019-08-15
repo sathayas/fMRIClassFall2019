@@ -64,7 +64,7 @@ fslFNIRT = Node(fsl.FNIRT(ref_file=fMNI,
                 name='fslFNIRT')
 
 # Creating a workflow object
-normT1wf = Workflow(name="fslNorm_T1", base_dir=outDir)
+normT1wf = Workflow(name="normT1wf", base_dir=outDir)
 
 # connecting nodes as a T1 normalization workflow
 normT1wf.connect(fslBET, "out_file", fslFLIRT, "in_file")
