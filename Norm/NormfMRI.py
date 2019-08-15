@@ -73,6 +73,34 @@ normT1wf.connect(fslFLIRT, 'out_matrix_file', fslFNIRT, 'affine_file')
 
 
 
+#
+#   fMRI pre-processing
+#
+# skip dummy scans
+extract = Node(fsl.ExtractROI(in_file=imagefMRI,  # input image
+                              t_min=4,            # first 4 volumes are deleted
+                              t_size=-1),
+               name="extract")
+
+# creating motion correction node
+mcflirt = Node(fsl.MCFLIRT(save_rms=True,   # saving displacement parameters
+                           save_plots=True, #
+                           mean_vol=True),  # saving mean image
+               name="mcflirt")
+
+# creating co-registration node (estimating the coregistration parameters)
+coreg = Node(fsl.FLIRT(dof=6,       # specifying rigid-body (6-parameters)
+                       cost='normmi'), # normizied mutual info
+             name="coreg")
+
+# applying the coregistration and normalization parameters to fMRI data
+applywarp = Node(fsl.ApplyWarp(ref_file=fMNI),
+                 name="applywarp")
+
+
+
+
+
 # DataSink to collect intermediate outputs
 datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
