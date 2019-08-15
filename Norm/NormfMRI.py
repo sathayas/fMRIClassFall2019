@@ -159,9 +159,28 @@ imageNormT1 = os.path.join(os.path.join(outDir,'NormT1'),
 # mean of the normalized fMRI
 mean_imageNormfMRI = image.mean_img(imageNormfMRI)
 
+#
+# VISUALIZING NORMLAIZED FMRI VS NORMALIZED T1
+#
 # displaying the mean of the normalized fMRI (axial)
 display = plot_anat(mean_imageNormfMRI,
                     display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageNormT1)
+
+# displaying the mean of the normalized fMRI (sagittal)
+display = plot_anat(mean_imageNormfMRI,
+                    display_mode='x',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageNormT1)
+
+# displaying the mean of the normalized fMRI (coronal)
+display = plot_anat(mean_imageNormfMRI,
+                    display_mode='y',
                     cut_coords=6)
 
 # adding edges from the corresponding T1w image
