@@ -45,8 +45,9 @@ fmask = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil.nii.gz'
 outDir = os.path.join(dataDir, 'WorkflowOutput')
 
 
-
-
+#
+#    T1 Normalization workflow
+#
 # Skullstrip process node
 fslBET = Node(fsl.BET(in_file=imageT1),
               name="fslBET")
@@ -58,8 +59,17 @@ fslFLIRT = Node(fsl.FLIRT(reference=fMNI,
                 name="fslFLIRT")
 
 # Non-linear normalization node
-fslFNIRT = Node(fsl.FNIRT(ref_file=fMNI),
+fslFNIRT = Node(fsl.FNIRT(ref_file=fMNI,
+                          fieldcoeff_file=True),
                 name='fslFNIRT')
+
+# Creating a workflow object
+normT1wf = Workflow(name="fslNorm_T1", base_dir=outDir)
+
+# connecting nodes as a T1 normalization workflow
+normT1wf.connect(fslBET, "out_file", fslFLIRT, "in_file")
+normT1wf.connect(fslBET, 'out_file', fslFNIRT, 'in_file')
+normT1wf.connect(fslFLIRT, 'out_matrix_file', fslFNIRT, 'affine_file')
 
 
 # DataSink to collect intermediate outputs
