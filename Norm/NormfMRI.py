@@ -97,42 +97,54 @@ coreg = Node(fsl.FLIRT(dof=6,       # specifying rigid-body (6-parameters)
 applywarp = Node(fsl.ApplyWarp(ref_file=fMNI),
                  name="applywarp")
 
+# smoothing with SUSAN
+susan = Node(fsl.SUSAN(brightness_threshold = 2000.0,  # brightness threshold
+                       fwhm=6.0),    # smoothing filter width (6mm, isotropic)
+             name='susan')
 
 
 
-
-# DataSink to collect intermediate outputs
+# creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
 
+# creating a workflow
+preprocfMRI = Workflow(name="PreprocfMRI", base_dir=outDir)
 
-# Creating a workflow object
-wfNormT1 = Workflow(name="wfNormT1", base_dir=outDir)
+# connecting the nodes to the main workflow
+preprocfMRI.connect(extract, 'roi_file', mcflirt, 'in_file')
+preprocfMRI.connect(mcflirt, 'mean_img', coreg, 'in_file')
+preprocfMRI.connect(normT1wf, 'fslBET.out_file', coreg, 'reference')
+preprocfMRI.connect(mcflirt, 'out_file', applywarp, 'in_file')
+preprocfMRI.connect(coreg, 'out_matrix_file', applywarp, 'premat')
+preprocfMRI.connect(normT1wf, 'fslFNIRT.fieldcoeff_file', applywarp, 'field_file')
+preprocfMRI.connect(applywarp, 'out_file', susan, 'in_file')
+preprocfMRI.connect(susan, 'smoothed_file', applymask, 'in_file')
 
-# connecting nodes as a workflow
-wfNormT1.connect(fslBET, "out_file", fslFLIRT, "in_file")
-wfNormT1.connect(fslBET, 'out_file', fslFNIRT,'in_file')
-wfNormT1.connect(fslFLIRT, 'out_matrix_file', fslFNIRT, 'affine_file')
+# connection to data sink
+preprocfMRI.connect(mcflirt,'par_file', datasink, 'par_file')
+preprocfMRI.connect(mcflirt,'rms_file', datasink, 'rms_file')
+preprocfMRI.connect(normT1wf, 'fslFNIRT.warped_file', datasink, 'NormT1')
+preprocfMRI.connect(applymask, 'out_file', datasink, 'MaskSmoNormfMRI')
 
-# adding datasink
-wfNormT1.connect(fslFLIRT, 'out_file', datasink, 'NormLinear')
-wfNormT1.connect(fslFNIRT, 'warped_file', datasink, 'NormNonLinear')
 
 
 
 # writing out graphs
-wfNormT1.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
+preprocfMRI.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # showing the graph
 plt.figure(figsize=[6,6])
-img=mpimg.imread(os.path.join(outDir,"wfNormT1","graph_orig.png"))
+img=mpimg.imread(os.path.join(outDir,"preprocfMRI","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
 
 # running the workflow
-wfNormT1.run()
+preprocfMRI.run()
+
+
 
 
 # examining the normalization results
