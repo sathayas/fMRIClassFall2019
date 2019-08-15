@@ -126,6 +126,7 @@ preprocfMRI.connect(susan, 'smoothed_file', applymask, 'in_file')
 preprocfMRI.connect(mcflirt,'par_file', datasink, 'par_file')
 preprocfMRI.connect(mcflirt,'rms_files', datasink, 'rms_file')
 preprocfMRI.connect(normT1wf, 'fslFNIRT.warped_file', datasink, 'NormT1')
+preprocfMRI.connect(applywarp, 'out_file', datasink, 'NormfMRI')
 preprocfMRI.connect(applymask, 'out_file', datasink, 'MaskSmoNormfMRI')
 
 
@@ -143,3 +144,25 @@ plt.show()
 
 # running the workflow
 preprocfMRI.run()
+
+
+
+
+
+# examining the normalization results
+# Normalized fMRI
+imageNormfMRI = os.path.join(os.path.join(outDir,'MaskSmoNormfMRI'),
+                             'sub-09_ses-test_task-fingerfootlips_bold_roi_mcf_warp_smooth_masked.nii.gz')
+# Normalized T1
+imageNormT1 = os.path.join(os.path.join(outDir,'NormT1'),
+                           'sub-09_ses-test_T1w_brain_warped.nii.gz')
+# mean of the normalized fMRI
+mean_imageNormfMRI = image.mean_img(imageNormfMRI)
+
+# displaying the mean of the normalized fMRI (axial)
+display = plot_anat(mean_imageNormfMRI,
+                    display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(imageNormT1)
