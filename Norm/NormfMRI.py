@@ -151,8 +151,8 @@ preprocfMRI.run()
 
 # examining the normalization results
 # Normalized fMRI
-imageNormfMRI = os.path.join(os.path.join(outDir,'MaskSmoNormfMRI'),
-                             'sub-09_ses-test_task-fingerfootlips_bold_roi_mcf_warp_smooth_masked.nii.gz')
+imageNormfMRI = os.path.join(os.path.join(outDir,'NormfMRI'),
+                             ' sub-09_ses-test_task-fingerfootlips_bold_roi_mcf_warp.nii.gz')
 # Normalized T1
 imageNormT1 = os.path.join(os.path.join(outDir,'NormT1'),
                            'sub-09_ses-test_T1w_brain_warped.nii.gz')
