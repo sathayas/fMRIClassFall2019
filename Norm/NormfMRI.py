@@ -12,13 +12,23 @@ from nilearn.plotting import plot_anat, view_img
 
 
 # Directory where your data set resides.
-dataDir = '/tmp/Data/ds102'
+dataDir = '/tmp/Data/ds114'
+
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
 
-# an T1 weighted image from one of the subjects
-imageT1 = layout.get(subject='26',
+# an fMRI image from one of the subjects (finger foot lips, test)
+imagefMRI = layout.get(subject='09',
+                       session='test',
+                       suffix='bold',
+                       task='fingerfootlips',
+                       extension='nii.gz',
+                       return_type='file')[0]
+
+# an T1 image for the same subject (test)
+imageT1 = layout.get(subject='09',
+                     session='test',
                      suffix='T1w',
                      extension='nii.gz',
                      return_type='file')[0]
@@ -26,14 +36,15 @@ imageT1 = layout.get(subject='26',
 # template image (from FSL)
 fMNI = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
 
+# brain mask in MNI space (from FSL)
+fmask = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil.nii.gz'
+
+
+
 # Output directory
 outDir = os.path.join(dataDir, 'WorkflowOutput')
 
-# template image (from FSL)
-fMNI = '/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz'
 
-# Output directory
-outDir = os.path.join(dataDir, 'WorkflowOutput')
 
 
 # Skullstrip process node
