@@ -72,6 +72,7 @@ normT1wf.connect(fslBET, 'out_file', fslFNIRT, 'in_file')
 normT1wf.connect(fslFLIRT, 'out_matrix_file', fslFNIRT, 'affine_file')
 
 
+
 # DataSink to collect intermediate outputs
 datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
