@@ -124,7 +124,7 @@ preprocfMRI.connect(susan, 'smoothed_file', applymask, 'in_file')
 
 # connection to data sink
 preprocfMRI.connect(mcflirt,'par_file', datasink, 'par_file')
-preprocfMRI.connect(mcflirt,'rms_file', datasink, 'rms_file')
+preprocfMRI.connect(mcflirt,'rms_files', datasink, 'rms_file')
 preprocfMRI.connect(normT1wf, 'fslFNIRT.warped_file', datasink, 'NormT1')
 preprocfMRI.connect(applymask, 'out_file', datasink, 'MaskSmoNormfMRI')
 
