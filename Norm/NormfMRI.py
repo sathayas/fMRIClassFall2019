@@ -213,3 +213,32 @@ display = plot_anat(mean_imageNormfMRI,
 
 # adding edges from the corresponding T1w image
 display.add_edges(fMNI)
+
+
+
+#
+# VISUALIZING NORMLAIZED T1 VS TEMPLATE
+#
+# displaying the mean of the normalized fMRI (axial)
+display = plot_anat(imageNormT1,
+                    display_mode='z',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(fMNI)
+
+# displaying the mean of the normalized fMRI (sagittal)
+display = plot_anat(imageNormT1,
+                    display_mode='x',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(fMNI)
+
+# displaying the mean of the normalized fMRI (coronal)
+display = plot_anat(imageNormT1,
+                    display_mode='y',
+                    cut_coords=6)
+
+# adding edges from the corresponding T1w image
+display.add_edges(fMNI)
