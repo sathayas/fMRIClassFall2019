@@ -1,0 +1,207 @@
+fmriprep/sub-09
+├── anat
+│   ├── sub-09_desc-aparcaseg_dseg.nii.gz
+│   ├── sub-09_desc-aseg_dseg.nii.gz
+│   ├── sub-09_desc-brain_mask.json
+│   ├── sub-09_desc-brain_mask.nii.gz
+│   ├── sub-09_desc-preproc_T1w.json
+│   ├── sub-09_desc-preproc_T1w.nii.gz
+│   ├── sub-09_dseg.nii.gz
+│   ├── sub-09_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5
+│   ├── sub-09_from-T1w_to-fsnative_mode-image_xfm.txt
+│   ├── sub-09_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5
+│   ├── sub-09_hemi-L_inflated.surf.gii
+│   ├── sub-09_hemi-L_midthickness.surf.gii
+│   ├── sub-09_hemi-L_pial.surf.gii
+│   ├── sub-09_hemi-L_smoothwm.surf.gii
+│   ├── sub-09_hemi-R_inflated.surf.gii
+│   ├── sub-09_hemi-R_midthickness.surf.gii
+│   ├── sub-09_hemi-R_pial.surf.gii
+│   ├── sub-09_hemi-R_smoothwm.surf.gii
+│   ├── sub-09_label-CSF_probseg.nii.gz
+│   ├── sub-09_label-GM_probseg.nii.gz
+│   ├── sub-09_label-WM_probseg.nii.gz
+│   ├── sub-09_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│   ├── sub-09_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│   ├── sub-09_space-MNI152NLin2009cAsym_desc-preproc_T1w.json
+│   ├── sub-09_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz
+│   ├── sub-09_space-MNI152NLin2009cAsym_dseg.nii.gz
+│   ├── sub-09_space-MNI152NLin2009cAsym_label-CSF_probseg.nii.gz
+│   ├── sub-09_space-MNI152NLin2009cAsym_label-GM_probseg.nii.gz
+│   └── sub-09_space-MNI152NLin2009cAsym_label-WM_probseg.nii.gz
+├── figures
+│   ├── sub-09_desc-reconall_T1w.svg
+│   ├── sub-09_dseg.svg
+│   └── sub-09_space-MNI152NLin2009cAsym_T1w.svg
+├── ses-retest
+│   ├── anat
+│   │   └── sub-09_ses-retest_from-orig_to-T1w_mode-image_xfm.txt
+│   ├── figures
+│   │   ├── sub-09_ses-retest_task-covertverbgeneration_desc-bbregister_bold.svg
+│   │   ├── sub-09_ses-retest_task-covertverbgeneration_desc-carpetplot_bold.svg
+│   │   ├── sub-09_ses-retest_task-covertverbgeneration_desc-compcorvar_bold.svg
+│   │   ├── sub-09_ses-retest_task-covertverbgeneration_desc-confoundcorr_bold.svg
+│   │   ├── sub-09_ses-retest_task-covertverbgeneration_desc-rois_bold.svg
+│   │   ├── sub-09_ses-retest_task-fingerfootlips_desc-bbregister_bold.svg
+│   │   ├── sub-09_ses-retest_task-fingerfootlips_desc-carpetplot_bold.svg
+│   │   ├── sub-09_ses-retest_task-fingerfootlips_desc-compcorvar_bold.svg
+│   │   ├── sub-09_ses-retest_task-fingerfootlips_desc-confoundcorr_bold.svg
+│   │   ├── sub-09_ses-retest_task-fingerfootlips_desc-rois_bold.svg
+│   │   ├── sub-09_ses-retest_task-linebisection_desc-bbregister_bold.svg
+│   │   ├── sub-09_ses-retest_task-linebisection_desc-carpetplot_bold.svg
+│   │   ├── sub-09_ses-retest_task-linebisection_desc-compcorvar_bold.svg
+│   │   ├── sub-09_ses-retest_task-linebisection_desc-confoundcorr_bold.svg
+│   │   ├── sub-09_ses-retest_task-linebisection_desc-rois_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtverbgeneration_desc-bbregister_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtverbgeneration_desc-carpetplot_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtverbgeneration_desc-compcorvar_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtverbgeneration_desc-confoundcorr_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtverbgeneration_desc-rois_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtwordrepetition_desc-bbregister_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtwordrepetition_desc-carpetplot_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtwordrepetition_desc-compcorvar_bold.svg
+│   │   ├── sub-09_ses-retest_task-overtwordrepetition_desc-confoundcorr_bold.svg
+│   │   └── sub-09_ses-retest_task-overtwordrepetition_desc-rois_bold.svg
+│   └── func
+│       ├── sub-09_ses-retest_task-covertverbgeneration_desc-confounds_regressors.json
+│       ├── sub-09_ses-retest_task-covertverbgeneration_desc-confounds_regressors.tsv
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-fsaverage5_hemi-L.func.gii
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-fsaverage5_hemi-R.func.gii
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_boldref.nii.gz
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+│       ├── sub-09_ses-retest_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+│       ├── sub-09_ses-retest_task-fingerfootlips_desc-confounds_regressors.json
+│       ├── sub-09_ses-retest_task-fingerfootlips_desc-confounds_regressors.tsv
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-fsaverage5_hemi-L.func.gii
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-fsaverage5_hemi-R.func.gii
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_boldref.nii.gz
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+│       ├── sub-09_ses-retest_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+│       ├── sub-09_ses-retest_task-linebisection_desc-confounds_regressors.json
+│       ├── sub-09_ses-retest_task-linebisection_desc-confounds_regressors.tsv
+│       ├── sub-09_ses-retest_task-linebisection_space-fsaverage5_hemi-L.func.gii
+│       ├── sub-09_ses-retest_task-linebisection_space-fsaverage5_hemi-R.func.gii
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_boldref.nii.gz
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+│       ├── sub-09_ses-retest_task-linebisection_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+│       ├── sub-09_ses-retest_task-overtverbgeneration_desc-confounds_regressors.json
+│       ├── sub-09_ses-retest_task-overtverbgeneration_desc-confounds_regressors.tsv
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-fsaverage5_hemi-L.func.gii
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-fsaverage5_hemi-R.func.gii
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_boldref.nii.gz
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+│       ├── sub-09_ses-retest_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+│       ├── sub-09_ses-retest_task-overtwordrepetition_desc-confounds_regressors.json
+│       ├── sub-09_ses-retest_task-overtwordrepetition_desc-confounds_regressors.tsv
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-fsaverage5_hemi-L.func.gii
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-fsaverage5_hemi-R.func.gii
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_boldref.nii.gz
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-brain_mask.json
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+│       ├── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+│       └── sub-09_ses-retest_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+└── ses-test
+    ├── anat
+    │   └── sub-09_ses-test_from-orig_to-T1w_mode-image_xfm.txt
+    ├── figures
+    │   ├── sub-09_ses-test_task-covertverbgeneration_desc-bbregister_bold.svg
+    │   ├── sub-09_ses-test_task-covertverbgeneration_desc-carpetplot_bold.svg
+    │   ├── sub-09_ses-test_task-covertverbgeneration_desc-compcorvar_bold.svg
+    │   ├── sub-09_ses-test_task-covertverbgeneration_desc-confoundcorr_bold.svg
+    │   ├── sub-09_ses-test_task-covertverbgeneration_desc-rois_bold.svg
+    │   ├── sub-09_ses-test_task-fingerfootlips_desc-bbregister_bold.svg
+    │   ├── sub-09_ses-test_task-fingerfootlips_desc-carpetplot_bold.svg
+    │   ├── sub-09_ses-test_task-fingerfootlips_desc-compcorvar_bold.svg
+    │   ├── sub-09_ses-test_task-fingerfootlips_desc-confoundcorr_bold.svg
+    │   ├── sub-09_ses-test_task-fingerfootlips_desc-rois_bold.svg
+    │   ├── sub-09_ses-test_task-linebisection_desc-bbregister_bold.svg
+    │   ├── sub-09_ses-test_task-linebisection_desc-carpetplot_bold.svg
+    │   ├── sub-09_ses-test_task-linebisection_desc-compcorvar_bold.svg
+    │   ├── sub-09_ses-test_task-linebisection_desc-confoundcorr_bold.svg
+    │   ├── sub-09_ses-test_task-linebisection_desc-rois_bold.svg
+    │   ├── sub-09_ses-test_task-overtverbgeneration_desc-bbregister_bold.svg
+    │   ├── sub-09_ses-test_task-overtverbgeneration_desc-carpetplot_bold.svg
+    │   ├── sub-09_ses-test_task-overtverbgeneration_desc-compcorvar_bold.svg
+    │   ├── sub-09_ses-test_task-overtverbgeneration_desc-confoundcorr_bold.svg
+    │   ├── sub-09_ses-test_task-overtverbgeneration_desc-rois_bold.svg
+    │   ├── sub-09_ses-test_task-overtwordrepetition_desc-bbregister_bold.svg
+    │   ├── sub-09_ses-test_task-overtwordrepetition_desc-carpetplot_bold.svg
+    │   ├── sub-09_ses-test_task-overtwordrepetition_desc-compcorvar_bold.svg
+    │   ├── sub-09_ses-test_task-overtwordrepetition_desc-confoundcorr_bold.svg
+    │   └── sub-09_ses-test_task-overtwordrepetition_desc-rois_bold.svg
+    └── func
+        ├── sub-09_ses-test_task-covertverbgeneration_desc-confounds_regressors.json
+        ├── sub-09_ses-test_task-covertverbgeneration_desc-confounds_regressors.tsv
+        ├── sub-09_ses-test_task-covertverbgeneration_space-fsaverage5_hemi-L.func.gii
+        ├── sub-09_ses-test_task-covertverbgeneration_space-fsaverage5_hemi-R.func.gii
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_boldref.nii.gz
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.json
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+        ├── sub-09_ses-test_task-covertverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+        ├── sub-09_ses-test_task-fingerfootlips_desc-confounds_regressors.json
+        ├── sub-09_ses-test_task-fingerfootlips_desc-confounds_regressors.tsv
+        ├── sub-09_ses-test_task-fingerfootlips_space-fsaverage5_hemi-L.func.gii
+        ├── sub-09_ses-test_task-fingerfootlips_space-fsaverage5_hemi-R.func.gii
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_boldref.nii.gz
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-brain_mask.json
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+        ├── sub-09_ses-test_task-fingerfootlips_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+        ├── sub-09_ses-test_task-linebisection_desc-confounds_regressors.json
+        ├── sub-09_ses-test_task-linebisection_desc-confounds_regressors.tsv
+        ├── sub-09_ses-test_task-linebisection_space-fsaverage5_hemi-L.func.gii
+        ├── sub-09_ses-test_task-linebisection_space-fsaverage5_hemi-R.func.gii
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_boldref.nii.gz
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-brain_mask.json
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+        ├── sub-09_ses-test_task-linebisection_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+        ├── sub-09_ses-test_task-overtverbgeneration_desc-confounds_regressors.json
+        ├── sub-09_ses-test_task-overtverbgeneration_desc-confounds_regressors.tsv
+        ├── sub-09_ses-test_task-overtverbgeneration_space-fsaverage5_hemi-L.func.gii
+        ├── sub-09_ses-test_task-overtverbgeneration_space-fsaverage5_hemi-R.func.gii
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_boldref.nii.gz
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.json
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+        ├── sub-09_ses-test_task-overtverbgeneration_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+        ├── sub-09_ses-test_task-overtwordrepetition_desc-confounds_regressors.json
+        ├── sub-09_ses-test_task-overtwordrepetition_desc-confounds_regressors.tsv
+        ├── sub-09_ses-test_task-overtwordrepetition_space-fsaverage5_hemi-L.func.gii
+        ├── sub-09_ses-test_task-overtwordrepetition_space-fsaverage5_hemi-R.func.gii
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_boldref.nii.gz
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-aparcaseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-aseg_dseg.nii.gz
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-brain_mask.json
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz
+        ├── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-preproc_bold.json
+        └── sub-09_ses-test_task-overtwordrepetition_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz
+
+10 directories, 194 files
