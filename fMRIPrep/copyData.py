@@ -33,7 +33,7 @@ listSubDir.sort()  # just so that the directories are sorted
 
 
 # Loop over subjects
-for iSubj = listSubjDir:
+for iSubj in listSubjDir:
     # Subject directory in the original data set
     subDir = os.path.join(resDir, iSubj)
 
