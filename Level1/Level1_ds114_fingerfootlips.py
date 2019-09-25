@@ -8,21 +8,32 @@ from nipype import Node, Workflow  # components to construct workflow
 from nipype.interfaces.io import DataSink  # datasink
 from nipype.algorithms import modelgen  # GLM model generator
 from nipype.interfaces.base import Bunch
-from bids.grabbids import BIDSLayout  # BIDSLayout object to specify file(s)
+from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
 
 
 # data directory
-dataDir = '/Users/sh45474/Documents/Teaching/fMRI_Fall_2018/Data/ds114'
+dataDir = '/tmp/Data/ds114'
 
-# base directory - where preprocessed fMRI data is located
-baseDir = os.path.join(dataDir, 'WorkflowOutput/FSL_Preproc_fMRI')
+# directory where preprocessed fMRI data is located
+baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
+subjDir = os.path.join(baseDir, 'sub-09')
+sesDir = os.path.join(subjDir, 'ses-test/func')
+
+# location of the pre-processed fMRI & mask
+# NB: Assuming that the preprocessing is done with fMRIprep
+fList = os.listdir(sesDir)  # getting the directory contents
+imagefMRI = [x for x in fList if
+                ('task-fingerfootlips' in x) and   # fingerfootlips task
+                ('preproc_bold.nii.gz' in x)][0]   # identifying the bold data
+imageMask = [x for x in fList if
+                ('task-fingerfootlips' in x) and   # fingerfootlips task
+                ('brain_mask.nii.gz' in x)][0]   # identifying the bold data
+###### Start from here
+# full path for fMRI and mask
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
 
-# pre-processed fMRI data
-imagefMRI = os.path.join(baseDir,
-                         'sub-09_ses-test_task-fingerfootlips_bold_roi_mcf_warp_smooth_masked.nii.gz')
 
 # task information file
 eventFile = layout.get(type='events',
@@ -94,7 +105,7 @@ feat = Node(fsl.FEAT(),
             name="feat")
 
 # creating datasink to collect outputs
-datasink = Node(DataSink(base_directory=outDir), 
+datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
 
@@ -111,4 +122,3 @@ firstLevel.connect([(feat, datasink, [('feat_dir', 'FSL_Level1.@feat')])])
 
 # running the workflow
 firstLevel.run()
-
