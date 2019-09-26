@@ -14,6 +14,12 @@ from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
 # data directory
 dataDir = '/tmp/Data/ds114'
 
+###########
+#
+# SPECIFYING THE FMRI DATA AND OTHER IMAGE FILES
+#
+###########
+
 # directory where preprocessed fMRI data is located
 baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
 subjDir = os.path.join(baseDir, 'sub-09')
@@ -28,8 +34,35 @@ imagefMRI = [x for x in fList if
 imageMask = [x for x in fList if
                 ('task-fingerfootlips' in x) and   # fingerfootlips task
                 ('brain_mask.nii.gz' in x)][0]   # identifying the bold data
-###### Start from here
-# full path for fMRI and mask
+
+filefMRI = os.path.join(sesDir,imagefMRI)
+fileMask = os.path.join(sesDir,imageMask)
+
+
+###########
+#
+# FMRI PREPROCESSING NODES
+#
+###########
+
+# skip dummy scans
+extract = Node(fsl.ExtractROI(in_file=filefMRI,  # input image full path
+                              t_min=4,            # first 4 volumes are deleted
+                              t_size=-1),
+               name="extract")
+
+# smoothing with SUSAN
+susan = Node(fsl.SUSAN(brightness_threshold = 0.0,  # default value for SUSAN
+                       fwhm=6.0),    # smoothing filter width (6mm, isotropic)
+             name='susan')
+
+# masking the fMRI with a brain mask
+applymask = Node(fsl.ApplyMask(mask_file=fileMask),
+                 name='applymask')
+
+
+
+##### Start from Here
 
 # Creating the layout object for this BIDS data set
 layout = BIDSLayout(dataDir)
