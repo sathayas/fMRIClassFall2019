@@ -58,7 +58,7 @@ extract = Node(fsl.ExtractROI(in_file=filefMRI,  # input image full path
                name="extract")
 
 # smoothing with SUSAN
-susan = Node(fsl.SUSAN(brightness_threshold = 0.0,  # default value for SUSAN
+susan = Node(fsl.SUSAN(brightness_threshold = 2000.0,  
                        fwhm=6.0),    # smoothing filter width (6mm, isotropic)
              name='susan')
 
