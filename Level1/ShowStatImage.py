@@ -13,7 +13,7 @@ imageT1 = os.path.join(anatDir,
 featDir = os.path.join(dataDir,
                        'WorkflowOutput/feat_dir/run0.feat/')
 statDir = os.path.join(featDir,'stats')
-imageStat = os.path.join(statDir, 'tstat6.nii.gz')
+imageStat = os.path.join(statDir, 'zstat6.nii.gz')
 
 # thresholding the stat image to positive values only for visualization
 thImageStat = math_img("np.ma.masked_less(img, 0)",
@@ -29,4 +29,5 @@ plot_stat_map(thImageStat, bg_img=imageT1,
 # interactive visualization
 view_img(thImageStat, bg_img=imageT1, cmap='black_red',
          symmetric_cmap=False, annotate=True,
-         colorbar=True, threshold=2.3, black_bg=True)
+         colorbar=True, threshold=2.3, black_bg=True,
+         cut_coords=coord_transform(23,27,36,thImageStat.affine))
