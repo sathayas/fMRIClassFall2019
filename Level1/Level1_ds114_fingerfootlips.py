@@ -20,7 +20,7 @@ outDir = os.path.join(dataDir,'BatchOutput')
 
 ##### PARAMETERS TO BE USED #####
 nDelfMRI = 4  # number of first scans to be deleted
-
+TR = 2.5 # this should be read from an image file, but for simplicity hard coded
 
 ###########
 #
@@ -65,7 +65,8 @@ sf.iterables = [('subject_id', subject_list),
 ###########
 #
 # FMRI PREPROCESSING NODES
-#
+#TR = 2.5
+
 ###########
 
 # skip dummy scans
@@ -98,10 +99,7 @@ fileEvent = layout.get(suffix='events',
                        extension='tsv',
                        return_type='file')[0]
 
-# getting TR from the image header
-fMRI = nib.load(filefMRI)   # image object
-hdr_fMRI = fMRI.header
-TR = hdr_fMRI['pixdim'][4]
+# Offset for onset times
 onsetOffset = nDelfMRI * TR  # time adjustement due to deleted fMRI volumes
 
 ## Getting experiment info from the event file, into a Bunch object
