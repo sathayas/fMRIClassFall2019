@@ -165,6 +165,10 @@ feat = Node(fsl.FEAT(),
 datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
+## Use the following DataSink output substitutions
+substitutions = [('_subject_id_', 'sub-'),
+                 ('_subsession_id_', '/ses-')
+                 ]
 
 ###########
 #
