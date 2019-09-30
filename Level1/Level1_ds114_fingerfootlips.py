@@ -14,35 +14,51 @@ from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
 # original data directory
 dataDir = '/tmp/Data/ds114'
 # Output directory
-outDir = os.path.join(dataDir,'WorkflowOutput')
+outDir = os.path.join(dataDir,'BatchOutput')
 
 
 ##### PARAMETERS TO BE USED #####
 nDelfMRI = 4  # number of first scans to be deleted
 
-###########
-#
-# SPECIFYING THE FMRI DATA AND OTHER IMAGE FILES
-#
-###########
 
+###########
+#
+# SETTING UP ITERABLES
+#
+###########
 # directory where preprocessed fMRI data is located
 baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
-subjDir = os.path.join(baseDir, 'sub-09')
-sesDir = os.path.join(subjDir, 'ses-test/func')
 
-# location of the pre-processed fMRI & mask
-# NB: Assuming that the preprocessing is done with fMRIprep
-fList = os.listdir(sesDir)  # getting the directory contents
-imagefMRI = [x for x in fList if
-                ('task-fingerfootlips' in x) and   # fingerfootlips task
-                ('preproc_bold.nii.gz' in x)][0]   # identifying the bold data
-imageMask = [x for x in fList if
-                ('task-fingerfootlips' in x) and   # fingerfootlips task
-                ('brain_mask.nii.gz' in x)][0]   # identifying the bold data
+# list of values for the iterables
+subject_list = ['02', '03', '04', '05', '07', '08', '09']
+session_list = ['test', 'retest']
+task_list = ['fingerfootlips']
 
-filefMRI = os.path.join(sesDir,imagefMRI)
-fileMask = os.path.join(sesDir,imageMask)
+# String template with {}-based strings
+templates = {'func': os.path.join(baseDir,
+                                  'sub-{subject_id}',
+                                  'ses-{subsession_id}',
+                                  'func',
+                                  ('sub-{subject_id}' +
+                                   'ses-{subsession_id}' +
+                                   'task-fingerfootlips' +
+                                   '_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz')),
+             'mask': os.path.join(baseDir,
+                                  'sub-{subject_id}',
+                                  'ses-{subsession_id}',
+                                  'func',
+                                  ('sub-{subject_id}' +
+                                   'ses-{subsession_id}' +
+                                   'task-fingerfootlips' +
+                                   '_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz'))
+             }
+
+# Create SelectFiles node
+sf = Node(SelectFiles(templates, sort_filelist=True),
+          name='sf')
+sf.iterables = [('subject_id', subject_list),
+                ('subsession_id', session_list)]
+
 
 
 ###########
@@ -52,8 +68,7 @@ fileMask = os.path.join(sesDir,imageMask)
 ###########
 
 # skip dummy scans
-extract = Node(fsl.ExtractROI(in_file=filefMRI,  # input image full path
-                              t_min=nDelfMRI,    # first volumes to be deleted
+extract = Node(fsl.ExtractROI(t_min=nDelfMRI,    # first volumes to be deleted
                               t_size=-1),
                name="extract")
 
@@ -63,7 +78,7 @@ susan = Node(fsl.SUSAN(brightness_threshold = 2000.0,
              name='susan')
 
 # masking the fMRI with a brain mask
-applymask = Node(fsl.ApplyMask(mask_file=fileMask),
+applymask = Node(fsl.ApplyMask(),
                  name='applymask')
 
 
@@ -162,6 +177,8 @@ datasink = Node(DataSink(base_directory=outDir),
 firstLevel = Workflow(name="Level1_FingerFootLips", base_dir=outDir)
 
 # connecting nodes
+firstLevel.connect(sf, 'func', extract, 'in_file')
+firstLevel.connect(sf, 'mask', applymask, 'mask_file')
 firstLevel.connect(extract, 'roi_file', susan, 'in_file')
 firstLevel.connect(susan, 'smoothed_file', applymask, 'in_file')
 firstLevel.connect(applymask, 'out_file', modelspec, 'functional_runs')
@@ -183,4 +200,4 @@ plt.axis('off')
 plt.show()
 
 # running the workflow
-firstLevel.run()
+firstLevel.run('MultiProc', plugin_args={'n_procs': 10})
