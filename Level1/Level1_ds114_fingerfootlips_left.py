@@ -177,6 +177,8 @@ substitutions = [('_subject_id_', 'sub-'),
                  ('_subsession_id_', '/ses-')
                  ]
 
+datasink.inputs.substitutions = substitutions
+
 ###########
 #
 # SETTING UP THE WORKFLOW NODES
