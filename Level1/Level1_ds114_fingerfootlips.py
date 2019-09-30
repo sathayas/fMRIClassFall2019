@@ -5,6 +5,7 @@ import pandas as pd
 import nibabel as nib   # nibabel to read TR from image header
 import nipype.interfaces.fsl as fsl # importing FSL interface functions
 from nipype import Node, Workflow  # components to construct workflow
+from nipype import SelectFiles  # to facilitate file i/o
 from nipype.interfaces.io import DataSink  # datasink
 from nipype.algorithms import modelgen  # GLM model generator
 from nipype.interfaces.base import Bunch
