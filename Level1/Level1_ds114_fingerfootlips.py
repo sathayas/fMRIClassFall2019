@@ -41,16 +41,16 @@ templates = {'func': os.path.join(baseDir,
                                   'ses-{subsession_id}',
                                   'func',
                                   ('sub-{subject_id}' +
-                                   'ses-{subsession_id}' +
-                                   'task-fingerfootlips' +
+                                   '_ses-{subsession_id}' +
+                                   '_task-fingerfootlips' +
                                    '_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz')),
              'mask': os.path.join(baseDir,
                                   'sub-{subject_id}',
                                   'ses-{subsession_id}',
                                   'func',
                                   ('sub-{subject_id}' +
-                                   'ses-{subsession_id}' +
-                                   'task-fingerfootlips' +
+                                   '_ses-{subsession_id}' +
+                                   '_task-fingerfootlips' +
                                    '_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz'))
              }
 
