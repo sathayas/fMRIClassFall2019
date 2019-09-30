@@ -10,6 +10,7 @@ from nipype.interfaces.io import DataSink  # datasink
 from nipype.algorithms import modelgen  # GLM model generator
 from nipype.interfaces.base import Bunch
 from bids.layout import BIDSLayout  # BIDSLayout object to specify file(s)
+from nipype.algorithms.misc import ModifyAffine # a function to modify affine info
 
 ##### DIRECTORY BUSINESS ######
 # original data directory
@@ -31,7 +32,7 @@ TR = 2.5 # this should be read from an image file, but for simplicity hard coded
 baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
 
 # list of values for the iterables
-subject_list = ['02', '03', '04', '05', '07', '08', '09']
+subject_list = ['01', '06', '10']
 session_list = ['test', 'retest']
 task_list = ['fingerfootlips']
 
@@ -83,6 +84,12 @@ susan = Node(fsl.SUSAN(brightness_threshold = 2000.0,
 applymask = Node(fsl.ApplyMask(),
                  name='applymask')
 
+# flip left / right node
+flipLR = Node(ModifyAffine(transformation_matrix=np.array([[-1,0,0,0],
+                                                           [0,1,0,0],
+                                                           [0,0,1,0],
+                                                           [0,0,0,1]])),
+              name='flipLR')
 
 ###########
 #
@@ -184,13 +191,14 @@ firstLevel.connect(sf, 'func', extract, 'in_file')
 firstLevel.connect(sf, 'mask', applymask, 'mask_file')
 firstLevel.connect(extract, 'roi_file', susan, 'in_file')
 firstLevel.connect(susan, 'smoothed_file', applymask, 'in_file')
-firstLevel.connect(applymask, 'out_file', modelspec, 'functional_runs')
+firstLevel.connect(applymask, 'out_file', flipLR, 'volumes')
+firstLevel.connect(flipLR, 'transformed_volumes', modelspec, 'functional_runs')
 firstLevel.connect(modelspec, 'session_info', level1design, 'session_info')
 firstLevel.connect(level1design, 'fsf_files', modelgen, 'fsf_file')
 firstLevel.connect(level1design, 'ev_files', modelgen, 'ev_files')
 firstLevel.connect(level1design, 'fsf_files', feat, 'fsf_file')
 firstLevel.connect(feat, 'feat_dir', datasink, 'feat_dir')
-firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
+firstLevel.connect(flipLR, 'transformed_volumes', datasink, 'preproc_out_file')
 
 # writing out graphs
 firstLevel.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
