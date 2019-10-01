@@ -1,4 +1,5 @@
 import os
+import json
 import pandas as pd
 from bids.layout import BIDSLayout
 
@@ -20,3 +21,20 @@ taskInfo = pd.read_csv(taskTSV, delimiter='\t')
 
 # see whats in the task info
 print(taskInfo)
+
+
+
+# Other meta info from accompanying JSON file
+taskJSON = layout.get(task='fingerfootlips',
+                      suffix='bold',
+                      extension='json',
+                      return_type='file')[0]
+
+# reading the JSON file
+f = open(taskJSON,'r')
+taskDict = json.load(f)
+f.close()
+
+# contents of the JSON file
+for iKey, iValue in taskDict.items():
+    print(iKey + ':   ' + str(iValue))
