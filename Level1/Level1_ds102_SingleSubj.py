@@ -61,14 +61,6 @@ applymask = Node(fsl.ApplyMask(mask_file=fileMask),
 #
 ###########
 
-# Creating the layout object for this BIDS data set
-layout = BIDSLayout(dataDir)
-
-# task information file
-fileEvent = layout.get(suffix='events',
-                       task='fingerfootlips',
-                       extension='tsv',
-                       return_type='file')[0]
 
 # getting TR from the image header
 fMRI = nib.load(filefMRI)   # image object
@@ -76,9 +68,22 @@ hdr_fMRI = fMRI.header
 TR = hdr_fMRI['pixdim'][4]
 onsetOffset = nDelfMRI * TR  # time adjustement due to deleted fMRI volumes
 
+# Creating the layout object for this BIDS data set
+layout = BIDSLayout(dataDir)
+
+# task information file
+##############################
+#
+# Fill in the blank: Solution for your excercise
+#
+##############################
+
 ## Getting experiment info from the event file, into a Bunch object
-trialInfo = pd.read_csv(fileEvent, sep='\t')
-conditions = sorted(list(set(trialInfo.trial_type)))
+##############################
+#
+# Fill in the blank: Solution for your excercise
+#
+##############################
 onsets = []
 durations = []
 
@@ -93,17 +98,11 @@ subject_info = [Bunch(conditions=conditions,
 
 
 ## Defining contrasts
-cont01 = ['average',        'T', conditions, [1/3., 1/3., 1/3.]]
-cont02 = ['Finger',         'T', conditions, [1, 0, 0]]
-cont03 = ['Foot',           'T', conditions, [0, 1, 0]]
-cont04 = ['Lips',           'T', conditions, [0, 0, 1]]
-cont05 = ['Finger > others','T', conditions, [1, -0.5, -0.5]]
-cont06 = ['Foot > others',  'T', conditions, [-0.5, 1, -0.5]]
-cont07 = ['Lips > others',  'T', conditions, [-0.5, -0.5, 1]]
-
-cont08 = ['activation',     'F', [cont02, cont03, cont04]]
-
-contrast_list = [cont01, cont02, cont03, cont04, cont05, cont06, cont07, cont08]
+##############################
+#
+# Fill in the blank: Solution for your excercise
+#
+##############################
 
 
 
@@ -146,19 +145,11 @@ datasink = Node(DataSink(base_directory=outDir),
 #
 ###########
 
-# creating the workflow
-firstLevel = Workflow(name="Level1_FingerFootLips", base_dir=outDir)
-
-# connecting nodes
-firstLevel.connect(extract, 'roi_file', susan, 'in_file')
-firstLevel.connect(susan, 'smoothed_file', applymask, 'in_file')
-firstLevel.connect(applymask, 'out_file', modelspec, 'functional_runs')
-firstLevel.connect(modelspec, 'session_info', level1design, 'session_info')
-firstLevel.connect(level1design, 'fsf_files', modelgen, 'fsf_file')
-firstLevel.connect(level1design, 'ev_files', modelgen, 'ev_files')
-firstLevel.connect(level1design, 'fsf_files', feat, 'fsf_file')
-firstLevel.connect(feat, 'feat_dir', datasink, 'feat_dir')
-firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
+##############################
+#
+# Fill in the blank: Solution for your excercise
+#
+##############################
 
 # writing out graphs
 firstLevel.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
