@@ -17,9 +17,6 @@ dataDir = '/tmp/Data/ds102'
 outDir = os.path.join(dataDir,'WorkflowOutput')
 
 
-##### PARAMETERS TO BE USED #####
-nDelfMRI = 4  # number of first scans to be deleted
-
 ###########
 #
 # SPECIFYING THE FMRI DATA AND OTHER IMAGE FILES
@@ -38,12 +35,6 @@ nDelfMRI = 4  # number of first scans to be deleted
 # FMRI PREPROCESSING NODES
 #
 ###########
-
-# skip dummy scans
-extract = Node(fsl.ExtractROI(in_file=filefMRI,  # input image full path
-                              t_min=nDelfMRI,    # first volumes to be deleted
-                              t_size=-1),
-               name="extract")
 
 # smoothing with SUSAN
 susan = Node(fsl.SUSAN(brightness_threshold = 2000.0,
@@ -84,17 +75,6 @@ layout = BIDSLayout(dataDir)
 # Fill in the blank: Solution for your excercise
 #
 ##############################
-onsets = []
-durations = []
-
-for itrial in conditions:
-    onsets.append(list(trialInfo[trialInfo.trial_type==itrial].onset-onsetOffset))
-    durations.append(list(trialInfo[trialInfo.trial_type==itrial].duration))
-
-subject_info = [Bunch(conditions=conditions,
-                      onsets=onsets,
-                      durations=durations,
-                      )]
 
 
 ## Defining contrasts
