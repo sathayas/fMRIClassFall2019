@@ -13,6 +13,8 @@ indSes = 'test'  # the session of interest
 ##### DIRECTORY BUSINESS ######
 # original data directory
 dataDir = '/tmp/Data/ds114'
+# Output directory
+outDir = os.path.join(dataDir,'WorkflowOutput')
 
 
 
@@ -62,3 +64,25 @@ copemerge = Node(fsl.Merge(dimension='t',
 varcopemerge = Node(fsl.Merge(dimension='t',
                            in_files=listVarcopeFiles),
                     name="varcopemerge")
+
+# creating datasink to collect outputs
+datasink = Node(DataSink(base_directory=outDir),
+                name='datasink')
+
+
+###########
+#
+# SETTING UP THE WORKFLOW NODES
+#
+###########
+
+# creating the workflow
+mergeCopes = Workflow(name="Level1", base_dir=outDir)
+
+# connecting nodes
+mergeCopes.connect(copemerge, 'merged_file', datasink, 'copeMerged')
+mergeCopes.connect(varcopemerge, 'merged_file', datasink, 'varcopeMerged')
+
+
+# running the workflow
+mergeCopes.run()
