@@ -77,8 +77,7 @@ contrastList = [cont01, cont02]
 
 # Setting up the second level analysis model node
 level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
-                                              regressors=dictReg)
-                                             ),
+                                              regressors=dictReg),
                     name='level2design')
 
 # Model calculation by FLAMEO
