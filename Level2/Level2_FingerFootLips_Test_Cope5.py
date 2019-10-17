@@ -85,6 +85,7 @@ flameo = Node(fsl.FLAMEO(run_mode='fe'),
               name="flameo")
 
 
+
 ###########
 #
 # NODES FOR THE MERGING IMAGES
@@ -111,7 +112,8 @@ minmask = Node(fsl.MinImage(),
 
 
 # creating datasink to collect outputs
-datasink = Node(DataSink(base_directory=outDir),
+datasink = Node(DataSink(base_directory=
+                         os.path.join(outDir,'FingerFootLips_Test_Cope5')),
                 name='datasink')
 
 
