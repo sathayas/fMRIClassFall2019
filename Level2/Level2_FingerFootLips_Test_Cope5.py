@@ -57,7 +57,7 @@ for iSubj in subject_list:
                             'ses-' + indSes,
                             'run0.feat',
                             'mask.nii.gz')
-    listVarcopeFiles.append(pathMask)
+    listMaskFiles.append(pathMask)
 
 
 ###########
@@ -66,12 +66,12 @@ for iSubj in subject_list:
 #
 ###########
 # Dictionary with regressors
-dictReg = {reg1: np.ones([1,len(subject_list)])  # vector of ones
+dictReg = {'reg1': [1]*len(subject_list) # vector of ones
           }
 
 # Contrasts
-cont01 = ['activation', 'T', dictReg.keys(), [1]]
-cont02 = ['activation', 'T', dictReg.keys(), [-1]]
+cont01 = ['activation', 'T', list(dictReg.keys()), [1]]
+cont02 = ['activation', 'T', list(dictReg.keys()), [-1]]
 
 contrastList = [cont01, cont02]
 
@@ -125,9 +125,9 @@ datasink = Node(DataSink(base_directory=outDir),
 secondLevel = Workflow(name="Level2", base_dir=outDir)
 
 # connecting nodes
-secondLevel.connect(level2model, 'design_mat', flameo, 'design_file')
-secondLevel.connect(level2model, 'design_con', flameo, 't_con_file')
-secondLevel.connect(level2model, 'design_grp', flameo, 'cov_split_file')
+secondLevel.connect(level2design, 'design_mat', flameo, 'design_file')
+secondLevel.connect(level2design, 'design_con', flameo, 't_con_file')
+secondLevel.connect(level2design, 'design_grp', flameo, 'cov_split_file')
 secondLevel.connect(copemerge, 'merged_file', flameo, 'cope_file')
 secondLevel.connect(varcopemerge, 'merged_file', flameo, 'var_cope_file')
 secondLevel.connect(maskmerge, 'merged_file', minmask, 'in_file')
