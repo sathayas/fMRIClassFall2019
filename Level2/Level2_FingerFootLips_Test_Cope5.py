@@ -20,7 +20,7 @@ outDir = os.path.join(dataDir,'WorkflowOutput')
 
 ###########
 #
-# A LIST OF COPE AND VARCOPE FILES TO BE MEREGED
+# A LIST OF COPE, VARCOPE, AND MASK FILES TO BE MEREGED
 #
 ###########
 # directory where preprocessed fMRI data is located
@@ -31,6 +31,7 @@ subject_list = ['%02d' % i for i in range(1,11)]
 
 listCopeFiles = []
 listVarcopeFiles = []
+listMaskFiles = []
 for iSubj in subject_list:
     # full path to a cope image
     pathCope = os.path.join(baseDir,
@@ -50,20 +51,65 @@ for iSubj in subject_list:
                             'varcope' + indCope + '.nii.gz')
     listVarcopeFiles.append(pathVarcope)
 
+    # full path to a mask image
+    pathMask = os.path.join(baseDir,
+                            'sub-' + iSubj,
+                            'ses-' + indSes,
+                            'run0.feat',
+                            'mask.nii.gz')
+    listVarcopeFiles.append(pathMask)
 
 
 ###########
 #
-# NODES FOR THE WORKFLOW
+# SETTING UP THE FIRST LEVEL ANALYSIS NODES
 #
 ###########
+# Dictionary with regressors
+dictReg = {reg1: np.ones([1,len(subject_list)])  # vector of ones
+          }
+
+# Contrasts
+cont01 = ['activation', 'T', dictReg.keys(), [1]]
+cont02 = ['activation', 'T', dictReg.keys(), [-1]]
+
+contrastList = [cont01, cont02]
+
+# Setting up the second level analysis model node
+level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
+                                              regressors=dictReg)
+                                             ),
+                    name='level2design')
+
+# Model calculation by FLAMEO
+flameo = Node(fsl.FLAMEO(run_mode='fe'),
+              name="flameo")
+
+
+###########
+#
+# NODES FOR THE MERGING IMAGES
+#
+###########
+# merging cope files
 copemerge = Node(fsl.Merge(dimension='t',
                            in_files=listCopeFiles),
                  name="copemerge")
 
+# merging varcope files
 varcopemerge = Node(fsl.Merge(dimension='t',
                            in_files=listVarcopeFiles),
                     name="varcopemerge")
+
+# merging mask files
+maskmerge = Node(fsl.Merge(dimension='t',
+                           in_files=listMaskFiles),
+                 name="maskmerge")
+
+# calculating the minimum across time points on merged mask image
+minmask = Node(fsl.MinImage(),
+               name="minmask")
+
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=outDir),
@@ -77,12 +123,18 @@ datasink = Node(DataSink(base_directory=outDir),
 ###########
 
 # creating the workflow
-mergeCopes = Workflow(name="Level1", base_dir=outDir)
+secondLevel = Workflow(name="Level2", base_dir=outDir)
 
 # connecting nodes
-mergeCopes.connect(copemerge, 'merged_file', datasink, 'copeMerged')
-mergeCopes.connect(varcopemerge, 'merged_file', datasink, 'varcopeMerged')
+secondLevel.connect(level2model, 'design_mat', flameo, 'design_file')
+secondLevel.connect(level2model, 'design_con', flameo, 't_con_file')
+secondLevel.connect(level2model, 'design_grp', flameo, 'cov_split_file')
+secondLevel.connect(copemerge, 'merged_file', flameo, 'cope_file')
+secondLevel.connect(varcopemerge, 'merged_file', flameo, 'var_cope_file')
+secondLevel.connect(maskmerge, 'merged_file', minmask, 'in_file')
+secondLevel.connect(minmask, 'out_file', flameo, 'mask_file')
+secondLevel.connect(flameo, 'stats_dir', datasink, 'stats_dir')
 
 
 # running the workflow
-mergeCopes.run()
+secondLevel.run()
