@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 import nibabel as nib
 import matplotlib.pyplot as plt
 import nipype.interfaces.fsl as fsl  # fsl
@@ -33,9 +34,7 @@ cluster = Node(fsl.Cluster(in_file=imgZStat,
                            threshold=zThresh,
                            out_index_file=True,
                            out_threshold_file=True,
-                           out_localmax_txt_file=True,
-                           out_size_file=True,
-                           minclustersize=True,dlh=3),
+                           out_localmax_txt_file=True),
                name='cluster')
 
 # data sink node
