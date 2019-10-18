@@ -62,7 +62,7 @@ for iSubj in subject_list:
 
 ###########
 #
-# SETTING UP THE FIRST LEVEL ANALYSIS NODES
+# SETTING UP THE SECOND LEVEL ANALYSIS NODES
 #
 ###########
 # Dictionary with regressors
