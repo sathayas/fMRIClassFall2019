@@ -78,7 +78,7 @@ globalMax = np.unravel_index(np.argmax(X_zstat), X_zstat.shape) # voxel space
 globalMaxMNI = coord_transform(globalMax[0],
                                globalMax[1],
                                globalMax[2],
-                               thImageStat.affine))  # MNI space
+                               thImageStat.affine)  # MNI space
 
 # blob overlay at global max
 plot_stat_map(thImageStat, bg_img=imageT1,
