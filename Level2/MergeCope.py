@@ -31,6 +31,7 @@ subject_list = ['%02d' % i for i in range(1,11)]
 
 listCopeFiles = []
 listVarcopeFiles = []
+listMaskFiles = []
 for iSubj in subject_list:
     # full path to a cope image
     pathCope = os.path.join(baseDir,
@@ -50,6 +51,13 @@ for iSubj in subject_list:
                             'varcope' + indCope + '.nii.gz')
     listVarcopeFiles.append(pathVarcope)
 
+    # full path to a mask image
+    pathMask = os.path.join(baseDir,
+                            'sub-' + iSubj,
+                            'ses-' + indSes,
+                            'run0.feat',
+                            'mask.nii.gz')
+    listMaskFiles.append(pathMask)
 
 
 ###########
@@ -57,13 +65,24 @@ for iSubj in subject_list:
 # NODES FOR THE WORKFLOW
 #
 ###########
+# merging cope images
 copemerge = Node(fsl.Merge(dimension='t',
                            in_files=listCopeFiles),
                  name="copemerge")
 
+# merging varcope images
 varcopemerge = Node(fsl.Merge(dimension='t',
                            in_files=listVarcopeFiles),
                     name="varcopemerge")
+
+# merging mask files
+maskmerge = Node(fsl.Merge(dimension='t',
+                           in_files=listMaskFiles),
+                 name="maskmerge")
+
+# calculating the minimum across time points on merged mask image
+minmask = Node(fsl.MinImage(),
+               name="minmask")
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=outDir),
@@ -82,6 +101,9 @@ mergeCopes = Workflow(name="Level1", base_dir=outDir)
 # connecting nodes
 mergeCopes.connect(copemerge, 'merged_file', datasink, 'copeMerged')
 mergeCopes.connect(varcopemerge, 'merged_file', datasink, 'varcopeMerged')
+mergeCopes.connect(maskmerge, 'merged_file', datasink, 'maskMerged')
+mergeCopes.connect(maskmerge, 'merged_file', minmask, 'in_file')
+mergeCopes.connect(minmask, 'out_file', datasink, 'groupmask')
 
 
 # running the workflow
