@@ -28,11 +28,6 @@ imgMask = os.path.join(statsDir, 'mask.nii.gz')
 
 
 # FINDING CLUSTERS IN THE ANALYSIS RESULTS
-# Smoothness estimate node
-smoEst = Node(fsl.SmoothEstimate(zstat_file=imgZStat,
-                                 mask_file=imgMask),
-              name='smoEst')
-
 # cluster node
 cluster = Node(fsl.Cluster(in_file=imgZStat,
                            threshold=zThresh,
@@ -40,9 +35,7 @@ cluster = Node(fsl.Cluster(in_file=imgZStat,
                            out_threshold_file=True,
                            out_localmax_txt_file=True,
                            out_size_file=True,
-                           out_max_file=True,
-                           out_mean_file=True,
-                           out_pval_file=True),
+                           minclustersize=True,dlh=3),
                name='cluster')
 
 # data sink node
@@ -51,12 +44,7 @@ datasink = Node(DataSink(base_directory=statsDir),
 
 # workflow connecting clustering to the datasink
 clusterWF = Workflow(name="clusterWF", base_dir=outDir)
-clusterWF.connect(smoEst, 'dlh', cluster, 'dlh')
 clusterWF.connect(cluster, 'index_file', datasink, 'index_file')
 clusterWF.connect(cluster, 'threshold_file', datasink, 'threshold_file')
 clusterWF.connect(cluster, 'localmax_txt_file', datasink, 'localmax_txt_file')
-clusterWF.connect(cluster, 'size_file', datasink, 'size_file')
-clusterWF.connect(cluster, 'max_file', datasink, 'max_file')
-clusterWF.connect(cluster, 'mean_file', datasink, 'mean_file')
-clusterWF.connect(cluster, 'pval_file', datasink, 'pval_file')
 clusterWF.run()
