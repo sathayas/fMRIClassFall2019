@@ -24,7 +24,7 @@ datasinkDir = os.path.join(outDir,'FingerFootLips_Test_Cope6_Handedness')
 # stats_dir directory
 statsDir = os.path.join(datasinkDir,'stats_dir/stats')
 # Z-stat image
-imgZStat = os.path.join(statsDir, 'zstat' + condInd + '.nii.gz')
+imgZStat = os.path.join(statsDir, 'zstat' + contInd + '.nii.gz')
 
 
 # FINDING CLUSTERS IN THE ANALYSIS RESULTS
@@ -49,7 +49,7 @@ clusterWF.run()
 
 
 # LOADING CLUSTER MAXIMA TABLE
-fMaxTable = os.path.join(statsDir,'localmax_txt_file/zstat' + condInd + '_localmax.txt')
+fMaxTable = os.path.join(statsDir,'localmax_txt_file/zstat' + contInd + '_localmax.txt')
 maxData = pd.read_csv(fMaxTable, sep='\t')   # reading the maxima file as a dataframe
 maxData.dropna(how='all', axis=1, inplace=True)  # removing empty columns
 print(maxData)
@@ -57,7 +57,7 @@ print(maxData)
 
 
 # CALCULATING CLUSTER SIZES
-fClusInd = os.path.join(statsDir,'index_file/zstat' + condInd + '_index.nii.gz')
+fClusInd = os.path.join(statsDir,'index_file/zstat' + contInd + '_index.nii.gz')
 X_ClusInd = nib.load(fClusInd).get_data()  # getting the image of cluster IDs
 clusterIDs = np.arange(1,X_ClusInd.max()+1)  # unique cluster IDs
 print('Cluster ID\tCluster Size')
@@ -75,7 +75,7 @@ imageT1 = os.path.join(anatDir,
                        'sub-09_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz')
 
 # Thresholded zstat image
-fThZStat=os.path.join(statsDir,'threshold_file/zstat' + condInd + '_threshold.nii.gz')
+fThZStat=os.path.join(statsDir,'threshold_file/zstat' + contInd + '_threshold.nii.gz')
 thImageStat=nib.load(fThZStat)
 
 # global maximum cooridnates
