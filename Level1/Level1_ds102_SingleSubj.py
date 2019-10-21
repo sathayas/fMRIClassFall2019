@@ -23,11 +23,23 @@ outDir = os.path.join(dataDir,'WorkflowOutput')
 #
 ###########
 
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+# directory where preprocessed fMRI data is located
+baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
+subjDir = os.path.join(baseDir, 'sub-26/func')
+runID = 'run-1'  # indentifying the run of interest
+
+# location of the pre-processed fMRI & mask
+# NB: Assuming that the preprocessing is done with fMRIprep
+fList = os.listdir(subjDir)  # getting the directory contents
+imagefMRI = [x for x in fList if
+                (runID in x) and   # selecting the run of interest
+                ('preproc_bold.nii.gz' in x)][0]   # identifying the bold data
+imageMask = [x for x in fList if
+                (runID in x) and   # selecting the run of interest
+                ('brain_mask.nii.gz' in x)][0]   # identifying the bold data
+
+filefMRI = os.path.join(subjDir,imagefMRI)
+fileMask = os.path.join(subjDir,imageMask)
 
 
 ###########
