@@ -83,7 +83,7 @@ cont01 = ['left>right', 'T', ['reg1', 'reg2'], [1, -1]]
 cont02 = ['right>left', 'T', ['reg1', 'reg2'], [-1, 1]]
 cont03 = ['activation', 'T', ['reg1', 'reg2'], [0.5, 0.5]]
 
-contrastList = [cont01, cont02]
+contrastList = [cont01, cont02, cont03]
 
 # Setting up the second level analysis model node
 level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
