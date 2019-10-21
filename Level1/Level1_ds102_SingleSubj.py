@@ -83,19 +83,29 @@ fileEvent = layout.get(suffix='events',
                        return_type='file')[0]
 
 ## Getting experiment info from the event file, into a Bunch object
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+trialInfo = pd.read_csv(fileEvent, sep='\t')
+conditions = sorted(list(set(trialInfo.Stimulus)))
+onsets = []
+durations = []
+
+for itrial in conditions:
+    onsets.append(list(trialInfo[trialInfo.Stimulus==itrial].onset))
+    durations.append(list(trialInfo[trialInfo.Stimulus==itrial].duration))
+
+subject_info = [Bunch(conditions=conditions,
+                      onsets=onsets,
+                      durations=durations,
+                      )]
 
 
 ## Defining contrasts
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+cont01 = ['congruent',        'T', conditions, [1, 0]]
+cont02 = ['incongruent',      'T', conditions, [0, 1]]
+cont03 = ['cong>incong',      'T', conditions, [1, -1]]
+cont04 = ['incong>cong',      'T', conditions, [-1, 1]]
+cont05 = ['average',          'T', conditions, [0.5, 0.5]]
+
+contrast_list = [cont01, cont02, cont03, cont04, cont05]
 
 
 
