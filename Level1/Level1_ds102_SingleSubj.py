@@ -148,18 +148,25 @@ datasink = Node(DataSink(base_directory=outDir),
 #
 ###########
 
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+# creating the workflow
+firstLevel = Workflow(name="Level1_Flanker_sub-26_run-1", base_dir=outDir)
+
+# connecting nodes
+firstLevel.connect(susan, 'smoothed_file', applymask, 'in_file')
+firstLevel.connect(applymask, 'out_file', modelspec, 'functional_runs')
+firstLevel.connect(modelspec, 'session_info', level1design, 'session_info')
+firstLevel.connect(level1design, 'fsf_files', modelgen, 'fsf_file')
+firstLevel.connect(level1design, 'ev_files', modelgen, 'ev_files')
+firstLevel.connect(level1design, 'fsf_files', feat, 'fsf_file')
+firstLevel.connect(feat, 'feat_dir', datasink, 'feat_dir')
+firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
 
 # writing out graphs
 firstLevel.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # showing the graph
 plt.figure(figsize=[6,6])
-img=mpimg.imread(os.path.join(outDir,"Level1_FingerFootLips","graph_orig.png"))
+img=mpimg.imread(os.path.join(outDir,"Level1_Flanker_sub-26_run-1","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
