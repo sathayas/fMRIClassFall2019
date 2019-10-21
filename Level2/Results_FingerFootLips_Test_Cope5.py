@@ -24,8 +24,6 @@ datasinkDir = os.path.join(outDir,'FingerFootLips_Test_Cope5')
 statsDir = os.path.join(datasinkDir,'stats_dir/stats')
 # Z-stat image
 imgZStat = os.path.join(statsDir, 'zstat1.nii.gz')
-# mask image
-imgMask = os.path.join(statsDir, 'mask.nii.gz')
 
 
 # FINDING CLUSTERS IN THE ANALYSIS RESULTS
