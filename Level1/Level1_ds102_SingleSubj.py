@@ -23,11 +23,23 @@ outDir = os.path.join(dataDir,'WorkflowOutput')
 #
 ###########
 
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+# directory where preprocessed fMRI data is located
+baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
+subjDir = os.path.join(baseDir, 'sub-26/func')
+runID = 'run-1'  # indentifying the run of interest
+
+# location of the pre-processed fMRI & mask
+# NB: Assuming that the preprocessing is done with fMRIprep
+fList = os.listdir(subjDir)  # getting the directory contents
+imagefMRI = [x for x in fList if
+                (runID in x) and   # selecting the run of interest
+                ('preproc_bold.nii.gz' in x)][0]   # identifying the bold data
+imageMask = [x for x in fList if
+                (runID in x) and   # selecting the run of interest
+                ('brain_mask.nii.gz' in x)][0]   # identifying the bold data
+
+filefMRI = os.path.join(subjDir,imagefMRI)
+fileMask = os.path.join(subjDir,imageMask)
 
 
 ###########
@@ -63,26 +75,37 @@ onsetOffset = nDelfMRI * TR  # time adjustement due to deleted fMRI volumes
 layout = BIDSLayout(dataDir)
 
 # task information file
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+fileEvent = layout.get(suffix='events',
+                       subject='26',
+                       run='1',
+                       task='flanker',
+                       extension='tsv',
+                       return_type='file')[0]
 
 ## Getting experiment info from the event file, into a Bunch object
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+trialInfo = pd.read_csv(fileEvent, sep='\t')
+conditions = sorted(list(set(trialInfo.Stimulus)))
+onsets = []
+durations = []
+
+for itrial in conditions:
+    onsets.append(list(trialInfo[trialInfo.Stimulus==itrial].onset))
+    durations.append(list(trialInfo[trialInfo.Stimulus==itrial].duration))
+
+subject_info = [Bunch(conditions=conditions,
+                      onsets=onsets,
+                      durations=durations,
+                      )]
 
 
 ## Defining contrasts
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+cont01 = ['congruent',        'T', conditions, [1, 0]]
+cont02 = ['incongruent',      'T', conditions, [0, 1]]
+cont03 = ['cong>incong',      'T', conditions, [1, -1]]
+cont04 = ['incong>cong',      'T', conditions, [-1, 1]]
+cont05 = ['average',          'T', conditions, [0.5, 0.5]]
+
+contrast_list = [cont01, cont02, cont03, cont04, cont05]
 
 
 
@@ -125,18 +148,25 @@ datasink = Node(DataSink(base_directory=outDir),
 #
 ###########
 
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+# creating the workflow
+firstLevel = Workflow(name="Level1_Flanker_sub-26_run-1", base_dir=outDir)
+
+# connecting nodes
+firstLevel.connect(susan, 'smoothed_file', applymask, 'in_file')
+firstLevel.connect(applymask, 'out_file', modelspec, 'functional_runs')
+firstLevel.connect(modelspec, 'session_info', level1design, 'session_info')
+firstLevel.connect(level1design, 'fsf_files', modelgen, 'fsf_file')
+firstLevel.connect(level1design, 'ev_files', modelgen, 'ev_files')
+firstLevel.connect(level1design, 'fsf_files', feat, 'fsf_file')
+firstLevel.connect(feat, 'feat_dir', datasink, 'feat_dir')
+firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
 
 # writing out graphs
 firstLevel.write_graph(graph2use='orig', dotfilename='graph_orig.dot')
 
 # showing the graph
 plt.figure(figsize=[6,6])
-img=mpimg.imread(os.path.join(outDir,"Level1_FingerFootLips","graph_orig.png"))
+img=mpimg.imread(os.path.join(outDir,"Level1_Flanker_sub-26_run-1","graph_orig.png"))
 imgplot = plt.imshow(img)
 plt.axis('off')
 plt.show()
