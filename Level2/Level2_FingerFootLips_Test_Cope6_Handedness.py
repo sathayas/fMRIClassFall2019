@@ -1,4 +1,5 @@
 import os  # system functions
+import pandas as pd
 import nipype.interfaces.fsl as fsl  # fsl
 from nipype import Node, Workflow  # components to construct workflow
 from nipype import SelectFiles  # to facilitate file i/o
@@ -6,7 +7,7 @@ from nipype.interfaces.io import DataSink  # datasink
 
 
 ##### PARAMETERS #####
-indCope = '5'  # the contrast of interest, finger vs others
+indCope = '6'  # the contrast of interest, finger vs others
 indSes = 'test'  # the session of interest
 
 
@@ -65,13 +66,21 @@ for iSubj in subject_list:
 # SETTING UP THE SECOND LEVEL ANALYSIS NODES
 #
 ###########
+# reading the subject info
+fileTable = os.path.join(dataDir,'participants.tsv')
+ptData = pd.read_csv(fileTable, sep='\t')
+leftHanded = list((ptData.dominant_hand=='left').astype(int))
+rightHanded = list((ptData.dominant_hand=='right').astype(int))
+
 # Dictionary with regressors
-dictReg = {'reg1': [1]*len(subject_list) # vector of ones
+
+dictReg = {'reg1': leftHanded, # dummy variables for left handed people
+           'reg2': rightHanded # dummy variables for right handed people
           }
 
 # Contrasts
-cont01 = ['activation', 'T', list(dictReg.keys()), [1]]
-cont02 = ['activation', 'T', list(dictReg.keys()), [-1]]
+cont01 = ['left>right', 'T', ['reg1', 'reg2'], [1, -1]]
+cont02 = ['right>left', 'T', ['reg1', 'reg2'], [-1, 1]]
 
 contrastList = [cont01, cont02]
 
@@ -113,7 +122,7 @@ minmask = Node(fsl.MinImage(),
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
-                         os.path.join(outDir,'FingerFootLips_Test_Cope5')),
+                         os.path.join(outDir,'FingerFootLips_Test_Cope6_Handedness')),
                 name='datasink')
 
 
