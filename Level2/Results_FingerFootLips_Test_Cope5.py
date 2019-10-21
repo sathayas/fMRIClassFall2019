@@ -47,6 +47,13 @@ clusterWF.connect(cluster, 'localmax_txt_file', datasink, 'localmax_txt_file')
 clusterWF.run()
 
 
+# LOADING CLUSTER MAXIMA TABLE
+fMaxTable = os.path.join(statsDir,'localmax_txt_file/zstat1_localmax.txt')
+maxData = pd.read_csv(fMaxTable, sep='\t')   # reading the maxima file as a dataframe
+maxData.dropna(how='all', axis=1, inplace=True)  # removing empty columns
+print(maxData)
+
+
 
 # CALCULATING CLUSTER SIZES
 fClusInd = os.path.join(statsDir,'index_file/zstat1_index.nii.gz')
