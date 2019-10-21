@@ -75,11 +75,12 @@ onsetOffset = nDelfMRI * TR  # time adjustement due to deleted fMRI volumes
 layout = BIDSLayout(dataDir)
 
 # task information file
-##############################
-#
-# Fill in the blank: Solution for your excercise
-#
-##############################
+fileEvent = layout.get(suffix='events',
+                       subject='26',
+                       run='1',
+                       task='flanker',
+                       extension='tsv',
+                       return_type='file')[0]
 
 ## Getting experiment info from the event file, into a Bunch object
 ##############################
