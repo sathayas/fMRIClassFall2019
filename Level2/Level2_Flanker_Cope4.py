@@ -1,4 +1,5 @@
 import os  # system functions
+import pandas as pd
 import nipype.interfaces.fsl as fsl  # fsl
 from nipype import Node, Workflow  # components to construct workflow
 from nipype import SelectFiles  # to facilitate file i/o
@@ -7,7 +8,6 @@ from nipype.interfaces.io import DataSink  # datasink
 
 ##### PARAMETERS #####
 indCope = '4'  # the contrast of interest, finger vs others
-indRun = '1'  # the run of interest
 
 
 ##### DIRECTORY BUSINESS ######
@@ -29,34 +29,86 @@ baseDir = os.path.join(dataDir, 'BatchOutput_FeatDir/feat_dir')
 # a list of subjects
 subject_list = ['%02d' % i for i in range(1,27)]
 
+# a list of runs
+run_list = ['1', '2']
+
 listCopeFiles = []
 listVarcopeFiles = []
 listMaskFiles = []
-###########################
-#
-#
-#  CREATE LISTS OF COPE, VARCOPE AND MASK IMAGES
-#
-#
-###########################
+varSubj = []   # recording subject IDs
+varRun = []    # recording sessions
+for iSubj in subject_list:
+    for iRun in run_list:
+        # recording subject ID and session
+        varSubj.append(iSubj)
+        varRun.append(iRun)
+
+        # full path to a cope image
+        pathCope = os.path.join(baseDir,
+                                'run-' + iRun,
+                                'sub-' + iSubj,
+                                'run0.feat',
+                                'stats',
+                                'cope' + indCope + '.nii.gz')
+        listCopeFiles.append(pathCope)
+
+        # full path to a varcope image
+        pathVarcope = os.path.join(baseDir,
+                                'run-' + iRun,
+                                'sub-' + iSubj,
+                                'run0.feat',
+                                'stats',
+                                'varcope' + indCope + '.nii.gz')
+        listVarcopeFiles.append(pathVarcope)
+
+        # full path to a mask image
+        pathMask = os.path.join(baseDir,
+                                'run-' + iRun,
+                                'sub-' + iSubj,
+                                'run0.feat',
+                                'mask.nii.gz')
+        listMaskFiles.append(pathMask)
+
+
 
 ###########
 #
 # SETTING UP THE FIRST LEVEL ANALYSIS NODES
 #
 ###########
-# Dictionary with regressors
-dictReg = {'reg1': [1]*len(subject_list) # vector of ones
-          }
+# creating a data frame for second-level analysis design matrix
+expData = pd.DataFrame(list(zip(varSubj, varRun)),
+                        columns=['Subject','Run'])
+
+# creating dummy variables for subjects
+for iSubj in subject_list:
+    expData['sub'+iSubj] = (expData.Subject==iSubj).astype(int)
+
+# converting the dummy variables into a dictionary of regressors
+reg_list = list(expData.columns[2:]) # list of regressors
+dictReg = expData[reg_list].to_dict('list')
+
 
 # Contrasts
-###########################
-#
-#
-#  DEFINE CONTRASTS TO EXAMINE INCONG>CONG DIFFERENCE
-#
-#
-###########################
+# creating an empty list of contrasts
+contrastlist = []
+# each contrast is the sum for a particular subject -- added to the contrastlist
+for i,iSubj in enumerate(subject_list):
+    dummySubj = [0] * len(subject_list)  # list of zeros
+    dummySubj[i] = 1   # indicator for this subject
+    tmpCont = [reg_list[i], 'T', reg_list, dummySubj]  # contrast for this subject
+    contrastlist.append(tmpCont)
+
+
+
+# Setting up the second level analysis model node
+level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
+                                              regressors=dictReg),
+                    name='level2design')
+
+# Model calculation by FLAMEO
+flameo = Node(fsl.FLAMEO(run_mode='fe'),
+              name="flameo")
 
 
 # Setting up the second level analysis model node
@@ -97,7 +149,7 @@ minmask = Node(fsl.MinImage(),
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
-                         os.path.join(outDir,'Flanker_Run1_Cope4')),
+                         os.path.join(outDir,'Flanker_Cope4_Level2')),
                 name='datasink')
 
 
