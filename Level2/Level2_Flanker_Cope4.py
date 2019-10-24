@@ -91,13 +91,13 @@ dictReg = expData[reg_list].to_dict('list')
 
 # Contrasts
 # creating an empty list of contrasts
-contrastlist = []
+contrastList = []
 # each contrast is the sum for a particular subject -- added to the contrastlist
 for i,iSubj in enumerate(subject_list):
     dummySubj = [0] * len(subject_list)  # list of zeros
     dummySubj[i] = 1   # indicator for this subject
     tmpCont = [reg_list[i], 'T', reg_list, dummySubj]  # contrast for this subject
-    contrastlist.append(tmpCont)
+    contrastList.append(tmpCont)
 
 
 
