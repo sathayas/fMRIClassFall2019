@@ -160,7 +160,7 @@ datasink = Node(DataSink(base_directory=
 ###########
 
 # creating the workflow
-secondLevel = Workflow(name="Level2", base_dir=outDir)
+secondLevel = Workflow(name="secondLevel", base_dir=outDir)
 
 # connecting nodes
 secondLevel.connect(level2design, 'design_mat', flameo, 'design_file')
