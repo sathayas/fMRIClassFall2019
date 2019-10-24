@@ -81,8 +81,8 @@ expData = pd.DataFrame(list(zip(varSubj, varSes)),
                         columns=['Subject','Session'])
 
 # creating a dummy variable for sessions (test:1, retest:-1)
-expData[TestRetest] = (expData.Session=='test').astype(int) -
-                      (expData.Session=='retest').astype(int)
+expData['TestRetest'] = (expData.Session=='test').astype(int)
+expData['TestRetest'] -= (expData.Session=='retest').astype(int)
 
 # creating dummy variables for subjects
 for iSubj in subject_list:
@@ -95,10 +95,10 @@ dictReg = expData[reg_list].to_dict('list')
 
 # Contrasts
 dummyZeros = [0] * len(subject_list)  # a list of n zeros (n=num of subj)
-cont04 = ['test>retest','T', reg_list, [1]+dummyZeros]
-cont05 = ['retest>test','T', reg_list, [-1]+dummyZeros]
+cont01 = ['test>retest','T', reg_list, [1]+dummyZeros]
+cont02 = ['retest>test','T', reg_list, [-1]+dummyZeros]
 
-contrastList = [cont01, cont02, cont03, cont04, cont05]
+contrastList = [cont01, cont02]
 
 
 # Setting up the second level analysis model node
