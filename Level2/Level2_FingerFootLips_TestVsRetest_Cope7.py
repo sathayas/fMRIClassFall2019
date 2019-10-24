@@ -89,7 +89,7 @@ for iSubj in subject_list:
     expData['sub'+iSubj] = (expData.Subject==iSubj).astype(int)
 
 # converting the dummy variables into a dictionary of regressors
-reg_list = expData.columns[2:] # list of regressors
+reg_list = list(expData.columns[2:]) # list of regressors
 dictReg = expData[reg_list].to_dict('list')
 
 
