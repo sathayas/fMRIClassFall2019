@@ -83,21 +83,6 @@ copemerge = Node(fsl.Merge(dimension='t',
                            in_files=listCopeFiles),
                  name="copemerge")
 
-# merging varcope files
-varcopemerge = Node(fsl.Merge(dimension='t',
-                           in_files=listVarcopeFiles),
-                    name="varcopemerge")
-
-# merging mask files
-maskmerge = Node(fsl.Merge(dimension='t',
-                           in_files=listMaskFiles),
-                 name="maskmerge")
-
-# calculating the minimum across time points on merged mask image
-minmask = Node(fsl.MinImage(),
-               name="minmask")
-
-
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
                          os.path.join(outDir,'Flanker_Cope4_Level3')),
