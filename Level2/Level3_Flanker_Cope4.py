@@ -26,11 +26,17 @@ baseDir = os.path.join(outDir, 'Flanker_Cope4_Level2/stats_dir/stats')
 subject_list = ['%d' % i for i in range(1,27)]  # not zero padded anymore
 
 listCopeFiles = []
+listVarcopeFiles = []
 for iSubj in subject_list:
     # full path to a cope image
     pathCope = os.path.join(baseDir,
                             'cope' + iSubj + '.nii.gz')
     listCopeFiles.append(pathCope)
+
+    # full path to a varcope image
+    pathVarcope = os.path.join(baseDir,
+                            'varcope' + iSubj + '.nii.gz')
+    listVarcopeFiles.append(pathVarcope)
 
 fileMask = os.path.join(baseDir,'mask.nii.gz')  # single mask image
 
@@ -83,6 +89,11 @@ copemerge = Node(fsl.Merge(dimension='t',
                            in_files=listCopeFiles),
                  name="copemerge")
 
+# merging varcope files
+varcopemerge = Node(fsl.Merge(dimension='t',
+                              in_files=listVarcopeFiles),
+                    name="varcopemerge")
+
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
                          os.path.join(outDir,'Flanker_Cope4_Level3')),
@@ -103,6 +114,7 @@ thirdLevel.connect(level2design, 'design_mat', flameo, 'design_file')
 thirdLevel.connect(level2design, 'design_con', flameo, 't_con_file')
 thirdLevel.connect(level2design, 'design_grp', flameo, 'cov_split_file')
 thirdLevel.connect(copemerge, 'merged_file', flameo, 'cope_file')
+thirdLevel.connect(varcopemerge, 'merged_file', flameo, 'var_cope_file')
 thirdLevel.connect(flameo, 'stats_dir', datasink, 'stats_dir')
 
 
