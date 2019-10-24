@@ -7,8 +7,7 @@ from nipype.interfaces.io import DataSink  # datasink
 
 
 ##### PARAMETERS #####
-indCope = '6'  # the contrast of interest, finger vs others
-indSes = 'test'  # the session of interest
+indCope = '7'  # the contrast of interest, finger vs others
 
 
 ##### DIRECTORY BUSINESS ######
@@ -30,35 +29,46 @@ baseDir = os.path.join(dataDir, 'BatchOutput_FingerFootLips/feat_dir')
 # a list of subjects
 subject_list = ['%02d' % i for i in range(1,11)]
 
+# a list of sessions
+ses_list = ['test', 'retest']
+
+# ininitializing lists to record file paths, subject ID, sessions
 listCopeFiles = []
 listVarcopeFiles = []
 listMaskFiles = []
+varSubj = []   # recording subject IDs
+varSes = []    # recording sessions
 for iSubj in subject_list:
-    # full path to a cope image
-    pathCope = os.path.join(baseDir,
-                            'sub-' + iSubj,
-                            'ses-' + indSes,
-                            'run0.feat',
-                            'stats',
-                            'cope' + indCope + '.nii.gz')
-    listCopeFiles.append(pathCope)
+    for iSes in ses_list:
+        # recording subject ID and session
+        varSubj.append(iSubj)
+        varSes.append(iSes)
 
-    # full path to a varcope image
-    pathVarcope = os.path.join(baseDir,
-                            'sub-' + iSubj,
-                            'ses-' + indSes,
-                            'run0.feat',
-                            'stats',
-                            'varcope' + indCope + '.nii.gz')
-    listVarcopeFiles.append(pathVarcope)
+        # full path to a cope image
+        pathCope = os.path.join(baseDir,
+                                'sub-' + iSubj,
+                                'ses-' + iSes,
+                                'run0.feat',
+                                'stats',
+                                'cope' + indCope + '.nii.gz')
+        listCopeFiles.append(pathCope)
 
-    # full path to a mask image
-    pathMask = os.path.join(baseDir,
-                            'sub-' + iSubj,
-                            'ses-' + indSes,
-                            'run0.feat',
-                            'mask.nii.gz')
-    listMaskFiles.append(pathMask)
+        # full path to a varcope image
+        pathVarcope = os.path.join(baseDir,
+                                'sub-' + iSubj,
+                                'ses-' + iSes,
+                                'run0.feat',
+                                'stats',
+                                'varcope' + indCope + '.nii.gz')
+        listVarcopeFiles.append(pathVarcope)
+
+        # full path to a mask image
+        pathMask = os.path.join(baseDir,
+                                'sub-' + iSubj,
+                                'ses-' + iSes,
+                                'run0.feat',
+                                'mask.nii.gz')
+        listMaskFiles.append(pathMask)
 
 
 ###########
@@ -66,24 +76,33 @@ for iSubj in subject_list:
 # SETTING UP THE SECOND LEVEL ANALYSIS NODES
 #
 ###########
-# reading the subject info
-fileTable = os.path.join(dataDir,'participants.tsv')
-ptData = pd.read_csv(fileTable, sep='\t')
-leftHanded = list((ptData.dominant_hand=='left').astype(int))
-rightHanded = list((ptData.dominant_hand=='right').astype(int))
+# creating a data frame for second-level analysis design matrix
+expData = pd.DataFrame(list(zip(varSubj, varSes)),
+                        columns=['Subject','Session'])
 
-# Dictionary with regressors
+# creating dummy variables for sessions
+for iSes in ses_list:
+    expData[iSes] = (expData.Session==iSes).astype(int)
 
-dictReg = {'reg1': leftHanded, # dummy variables for left handed people
-           'reg2': rightHanded # dummy variables for right handed people
-          }
+# creating dummy variables for subjects
+for iSubj in subject_list:
+    expData['sub'+iSubj] = (expData.Subject==iSubj).astype(int)
+
+# converting the dummy variables into a dictionary of regressors
+reg_list = expData.columns[2:] # list of regressors
+dictReg = expData[reg_list].to_dict('list')
+
 
 # Contrasts
-cont01 = ['left>right', 'T', ['reg1', 'reg2'], [1, -1]]
-cont02 = ['right>left', 'T', ['reg1', 'reg2'], [-1, 1]]
-cont03 = ['activation', 'T', ['reg1', 'reg2'], [0.5, 0.5]]
+dummyZeros = [0] * len(subject_list)  # a list of n zeros (n=num of subj)
+cont01 = ['test',       'T', reg_list, [1, 0]+dummyZeros]
+cont02 = ['retest',     'T', reg_list, [0, 1]+dummyZeros]
+cont03 = ['both',       'T', reg_list, [1, 1]+dummyZeros]
+cont04 = ['test>retest','T', reg_list, [1,-1]+dummyZeros]
+cont05 = ['retest>test','T', reg_list, [-1,1]+dummyZeros]
 
-contrastList = [cont01, cont02, cont03]
+contrastList = [cont01, cont02, cont03, cont04, cont05]
+
 
 # Setting up the second level analysis model node
 level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
@@ -123,7 +142,7 @@ minmask = Node(fsl.MinImage(),
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
-                         os.path.join(outDir,'FingerFootLips_Test_Cope6_Handedness')),
+                         os.path.join(outDir,'FingerFootLips_TestVsRetest_Cope7')),
                 name='datasink')
 
 
@@ -134,7 +153,7 @@ datasink = Node(DataSink(base_directory=
 ###########
 
 # creating the workflow
-secondLevel = Workflow(name="Level2", base_dir=outDir)
+secondLevel = Workflow(name="secondLevel", base_dir=outDir)
 
 # connecting nodes
 secondLevel.connect(level2design, 'design_mat', flameo, 'design_file')
