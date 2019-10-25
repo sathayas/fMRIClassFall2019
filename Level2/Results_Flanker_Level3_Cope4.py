@@ -19,7 +19,7 @@ dataDir = '/tmp/Data/ds102'
 # Output directory
 outDir = os.path.join(dataDir,'WorkflowOutput')
 # Datasink directory
-datasinkDir = os.path.join(outDir,'Flanker_Run1_Cope4')
+datasinkDir = os.path.join(outDir,'Flanker_Cope4_Level3')
 # stats_dir directory
 statsDir = os.path.join(datasinkDir,'stats_dir/stats')
 # Z-stat image
