@@ -63,16 +63,6 @@ level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
                     name='level2design')
 
 # Model calculation by FLAMEO
-flameo = Node(fsl.FLAMEO(run_mode='fe'),
-              name="flameo")
-
-
-# Setting up the second level analysis model node
-level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
-                                              regressors=dictReg),
-                    name='level2design')
-
-# Model calculation by FLAMEO
 flameo = Node(fsl.FLAMEO(mask_file=fileMask,  # specifying mask image in flameo
                          run_mode='fe'),
               name="flameo")
