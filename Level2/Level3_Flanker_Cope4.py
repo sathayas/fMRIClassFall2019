@@ -64,7 +64,7 @@ level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
 
 # Model calculation by FLAMEO
 flameo = Node(fsl.FLAMEO(mask_file=fileMask,  # specifying mask image in flameo
-                         run_mode='fe'),
+                         run_mode='ols'),
               name="flameo")
 
 
@@ -104,7 +104,7 @@ thirdLevel.connect(level2design, 'design_mat', flameo, 'design_file')
 thirdLevel.connect(level2design, 'design_con', flameo, 't_con_file')
 thirdLevel.connect(level2design, 'design_grp', flameo, 'cov_split_file')
 thirdLevel.connect(copemerge, 'merged_file', flameo, 'cope_file')
-thirdLevel.connect(varcopemerge, 'merged_file', flameo, 'var_cope_file')
+#thirdLevel.connect(varcopemerge, 'merged_file', flameo, 'var_cope_file')
 thirdLevel.connect(flameo, 'stats_dir', datasink, 'stats_dir')
 
 
