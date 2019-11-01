@@ -6,7 +6,7 @@ from nilearn.image import math_img, coord_transform
 
 ##### PARAMETERS #####
 # contrast of interest
-contInd = '1'
+contInd = '2'
 # desired FDR level
 q = 0.05
 
