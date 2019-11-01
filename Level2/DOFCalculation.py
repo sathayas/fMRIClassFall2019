@@ -4,6 +4,16 @@ from nipype import Node, Workflow  # components to construct workflow
 from nipype import SelectFiles  # to facilitate file i/o
 from nipype.interfaces.io import DataSink  # datasink
 
+# a dummy function -- just to get the file location of a file parameter
+def FileNameExtract(fileObject):
+    import os
+    filePath = os.path.split(fileObject)
+    fileOut = os.path.join(filePath,'FileName.txt')
+    f = open(fileOut,'w')
+    f.write(fileOut)
+    f.close()
+    return fileOut
+
 
 ##### PARAMETERS #####
 indCope = '5'  # the contrast of interest, finger vs others
@@ -42,6 +52,26 @@ level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
                                               regressors=dictReg),
                     name='level2design')
 
-# Model calculation by FLAMEO
-flameo = Node(fsl.FLAMEO(run_mode='fe'),
-              name="flameo")
+filenameextract = Node(interface=Function(input_names=['fileObject'],
+                                          output_names=['fileOut'],
+                                          function=FileNameExtract),
+                       name='filenameextract')
+
+# creating datasink to collect outputs
+datasink = Node(DataSink(base_directory=
+                         os.path.join(outDir,'DOFCalculation')),
+                name='datasink')
+
+
+
+
+# creating the workflow
+dofCalc = Workflow(name="dofCalc", base_dir=outDir)
+
+# connecting nodes
+dofCalc.connect(level2design, 'design_mat', filenameextraxt, 'fileObject')
+dofCalc.connect(filenameextraxt, 'fileOut', datasink, 'fileOut')
+
+
+# running the workflow
+dofCalc.run()
