@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import nibabel as nib
 
 ##### PARAMETERS #####
 # contrast of interest
