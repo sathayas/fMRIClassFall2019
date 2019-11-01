@@ -1,6 +1,8 @@
 import os
 import numpy as np
 import nibabel as nib
+from nilearn.plotting import plot_stat_map, view_img
+from nilearn.image import math_img, coord_transform
 
 ##### PARAMETERS #####
 # contrast of interest
