@@ -6,10 +6,9 @@ from nipype.interfaces.io import DataSink  # datasink
 from nipype.interfaces.utility import Function  # for custom made function
 
 # a dummy function -- just to get the file location of a file parameter
-def FileNameExtract(fileObject):
+def FileNameExtract(targetDir):
     import os
-    filePath = os.path.split(fileObject)
-    fileOut = os.path.join(filePath,'FileName.txt')
+    fileOut = os.path.join(targetDir,'FileName.txt')
     f = open(fileOut,'w')
     f.write(fileOut)
     f.close()
@@ -53,6 +52,7 @@ level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
                                               regressors=dictReg),
                     name='level2design')
 
+
 filenameextract = Node(interface=Function(input_names=['fileObject'],
                                           output_names=['fileOut'],
                                           function=FileNameExtract),
@@ -71,7 +71,7 @@ dofCalc = Workflow(name="dofCalc", base_dir=outDir)
 
 # connecting nodes
 dofCalc.connect(level2design, 'design_mat', filenameextract, 'fileObject')
-dofCalc.connect(filenameextraxt, 'fileOut', datasink, 'fileOut')
+dofCalc.connect(filenameextract, 'fileOut', datasink, 'fileOut')
 
 
 # running the workflow
