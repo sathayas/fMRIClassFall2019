@@ -37,8 +37,13 @@ nReg = 1
 # Degrees of freedom
 dof = nCope - nReg
 
-# FSL shell command to convert t-stat image to p-value image
+# FSL shell command to convert t-stat image to log p-value image
 com_logP = 'ttologp -logpout '
 com_logP += logPImg + ' ' + varcopeImg + ' ' + copeImg + ' '
 com_logP += str(dof)
 res = os.system(com_logP)
+
+# FSL shell command to convert log p-value image to p-value image
+com_P = 'fslmaths '
+com_P += logPImg + ' -exp ' PImg
+res = os.system(com_P)
