@@ -45,5 +45,5 @@ res = os.system(com_logP)
 
 # FSL shell command to convert log p-value image to p-value image
 com_P = 'fslmaths '
-com_P += logPImg + ' -exp ' PImg
+com_P += logPImg + ' -exp ' + PImg
 res = os.system(com_P)
