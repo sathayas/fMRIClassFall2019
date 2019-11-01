@@ -3,6 +3,7 @@ import nipype.interfaces.fsl as fsl  # fsl
 from nipype import Node, Workflow  # components to construct workflow
 from nipype import SelectFiles  # to facilitate file i/o
 from nipype.interfaces.io import DataSink  # datasink
+from nipype.interfaces.utility import Function  # for custom made function
 
 # a dummy function -- just to get the file location of a file parameter
 def FileNameExtract(fileObject):
@@ -69,7 +70,7 @@ datasink = Node(DataSink(base_directory=
 dofCalc = Workflow(name="dofCalc", base_dir=outDir)
 
 # connecting nodes
-dofCalc.connect(level2design, 'design_mat', filenameextraxt, 'fileObject')
+dofCalc.connect(level2design, 'design_mat', filenameextract, 'fileObject')
 dofCalc.connect(filenameextraxt, 'fileOut', datasink, 'fileOut')
 
 
