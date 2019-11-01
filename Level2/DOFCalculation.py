@@ -5,12 +5,19 @@ from nipype import SelectFiles  # to facilitate file i/o
 from nipype.interfaces.io import DataSink  # datasink
 from nipype.interfaces.utility import Function  # for custom made function
 
-# a dummy function -- just to get the file location of a file parameter
-def FileNameExtract(targetDir):
+# a function to calculate error DOF
+def DOFCalc(targetDir, desMtx):
     import os
-    fileOut = os.path.join(targetDir,'FileName.txt')
+    import numpy as np
+    # calculating the design matrix rank
+    dofModel = np.linalg.matrix_rank(np.array(list(desMtx.values())))
+    # calculating the error dof
+    dofFull = np.max(np.array(list(desMtx.values())).shape)
+    dofError = dofFull - dofModel
+    # writing out dof to a file
+    fileOut = os.path.join(targetDir,'dof')
     f = open(fileOut,'w')
-    f.write(fileOut)
+    f.write(str(dofError))
     f.close()
     return fileOut
 
@@ -52,26 +59,28 @@ level2design = Node(fsl.MultipleRegressDesign(contrasts=contrastList,
                                               regressors=dictReg),
                     name='level2design')
 
-
-filenameextract = Node(interface=Function(input_names=['fileObject'],
-                                          output_names=['fileOut'],
-                                          function=FileNameExtract),
-                       name='filenameextract')
+dofCalc = Node(interface=Function(input_names=['targetDir', 'desMtx'],
+                                              output_names=['fileOut'],
+                                              function=DOFCalc),
+               name='dofCalc')
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
                          os.path.join(outDir,'DOFCalculation')),
                 name='datasink')
 
+# directory where we create a DOF file
+DOFCalc.inputs.targetDir = datasink.inputs.base_directory
+# passing on the design matrix to the DOF calculation file
+DOFCalc.inputs.desMtx = dictReg
 
-
+# passing
 
 # creating the workflow
 dofCalc = Workflow(name="dofCalc", base_dir=outDir)
 
 # connecting nodes
-dofCalc.connect(level2design, 'design_mat', filenameextract, 'fileObject')
-dofCalc.connect(filenameextract, 'fileOut', datasink, 'fileOut')
+dofCalc.connect(DOFCalc, 'fileOut', datasink, 'fileOut')
 
 
 # running the workflow
