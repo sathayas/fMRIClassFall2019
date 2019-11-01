@@ -15,7 +15,7 @@ q = 0.05
 dataDir = '/tmp/Data/ds114'
 # Statistics directory from the 2nd level analysis
 wfDir = os.path.join(dataDir,'WorkflowOutput')
-statDir = os.path.join(wfDir,'FingerFootLips_Test_Cope5/stats_dir/stats/')
+statDir = os.path.join(wfDir,'FingerFootLips_TestVsRetest_Cope7/stats_dir/stats/')
 # FDR results directory
 fdrDir = os.path.join(statDir,'FDR')
 
@@ -67,45 +67,3 @@ com_FDR = 'fdr -i '
 com_FDR += PImg + ' -m ' + maskImg
 com_FDR += ' -q ' + str(q) + ' -a ' + fdrPImg
 res = os.system(com_FDR)
-
-
-# thresholding the FDR p-image
-com_thFDR = 'fslmaths '
-com_thFDR += fdrPImg + ' -uthr ' + str(q) + ' ' + fdrThreshImg
-res = os.system(com_thFDR)
-
-# masking the z-stat image for significant voxels only for FDR<q
-com_thZ = 'fslmaths '
-com_thZ += zstatImg + ' -mas ' + fdrThreshImg + ' ' + fdrThreshZImg
-res = os.system(com_thZ)
-
-
-
-##### OVERLAY OF SIGNIFICANT BLOBS #####
-# T1 weighted image for background
-anatDir = os.path.join(dataDir,'derivatives_selected/fmriprep/sub-09/anat/')
-imageT1 = os.path.join(anatDir,
-                       'sub-09_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz')
-
-# Thresholded zstat image
-thImageStat=nib.load(fdrThreshZImg)
-
-# global maximum cooridnates
-X_zstat = thImageStat.get_data()  # loading the thresholded zstat image
-globalMax = np.unravel_index(np.argmax(X_zstat), X_zstat.shape) # voxel space
-globalMaxMNI = coord_transform(globalMax[0],
-                               globalMax[1],
-                               globalMax[2],
-                               thImageStat.affine)  # MNI space
-
-# blob overlay at global max
-plot_stat_map(thImageStat, bg_img=imageT1,
-              colorbar=True, black_bg=True,
-              draw_cross=True,
-              cut_coords=globalMaxMNI)
-
-# interactive visualization
-view_img(thImageStat, bg_img=imageT1, cmap='black_red',
-         symmetric_cmap=False, annotate=True,
-         colorbar=True, black_bg=True,
-         cut_coords=globalMaxMNI)
