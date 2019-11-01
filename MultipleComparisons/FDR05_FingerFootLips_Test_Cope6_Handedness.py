@@ -15,7 +15,7 @@ q = 0.05
 dataDir = '/tmp/Data/ds114'
 # Statistics directory from the 2nd level analysis
 wfDir = os.path.join(dataDir,'WorkflowOutput')
-statDir = os.path.join(wfDir,'FingerFootLips_TestVsRetest_Cope7/stats_dir/stats/')
+statDir = os.path.join(wfDir,'FingerFootLips_Test_Cope6_Handedness/stats_dir/stats/')
 # FDR results directory
 fdrDir = os.path.join(statDir,'FDR')
 
