@@ -19,16 +19,20 @@ fdrDir = os.path.join(statDir,'FDR')
 if not os.path.exists(fdrDir):
         os.makedirs(fdrDir)
 
-# image for the contrast of interest
+# images for the contrast of interest
 copeImg = os.path.join(statDir,'cope' + contInd + '.nii.gz')
 varcopeImg = os.path.join(statDir,'varcope' + contInd + '.nii.gz')
 maskImg = os.path.join(statDir,'mask.nii.gz')
+zstatImg = os.path.join(statDir,'zstat' + contInd + '.nii.gz')
 
 # output image names
 logPImg = os.path.join(fdrDir,'logp' + contInd + '.nii.gz') # logP image
 PImg = os.path.join(fdrDir,'p' + contInd + '.nii.gz') # P image
 fdrPImg = os.path.join(fdrDir,'FDRp' + contInd + '.nii.gz') # FDR-corrected P image
 fdrThreshImg = os.path.join(fdrDir,'FDRthresh_p' + contInd + '.nii.gz') # thresholded FDR P image
+# z-stat image thresholded so that only significant voxels (by FDR) are included
+fdrThreshZImg = os.path.join(fdrDir,'FDRthresh_zstat' + contInd + '.nii.gz')
+
 
 ##### T-STATISTIC IMAGE TO P-VALUE IMAGE #####
 
@@ -65,3 +69,8 @@ res = os.system(com_FDR)
 com_thFDR = 'fslmaths '
 com_thFDR += fdrPImg + ' -uthr ' + str(q) + ' ' + fdrThreshImg
 res = os.system(com_thFDR)
+
+# masking the z-stat image for significant voxels only for FDR<q
+com_thZ = 'fslmaths '
+com_thZ += zstatImg + ' -mas ' + fdrThreshImg + ' ' + fdrThreshZImg
+res = os.system(com_thZ)
