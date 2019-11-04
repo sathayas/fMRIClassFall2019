@@ -41,10 +41,9 @@ fdrThreshZImg = os.path.join(fdrDir,'FDRthresh_zstat' + contInd + '.nii.gz')
 ##### T-STATISTIC IMAGE TO P-VALUE IMAGE #####
 
 # calculating error dof
-# Number of cope images in the merged cope
-nCope = 20
-# Number of regressors in the design matrix
-nReg = 11
+#
+# FILL IN THE BLANK 
+#
 # Degrees of freedom
 dof = nCope - nReg
 
