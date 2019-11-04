@@ -56,7 +56,7 @@ res = os.system(com_merge)
 
 ##### PERMUTATION TEST WITH RANDOMISE #####
 maskImg = os.path.join(statDir,'mask.nii.gz')
-com_perm = 'randomise -i ' + cope4DImg + '-o Perm '
+com_perm = 'randomise -i ' + cope4DImg + ' -o Perm '
 com_perm += '-m ' + maskImg
-com_perm += '-1 -n ' + str(nPerm) + ' -x'
+com_perm += ' -1 -n ' + str(nPerm) + ' -x'
 res = os.system(com_perm)
