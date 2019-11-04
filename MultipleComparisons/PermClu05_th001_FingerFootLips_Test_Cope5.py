@@ -1,4 +1,5 @@
 import os
+import scipy
 import numpy as np
 import nibabel as nib
 from nilearn.plotting import plot_stat_map, view_img
@@ -57,11 +58,33 @@ res = os.system(com_merge)
 
 
 ##### PERMUTATION TEST WITH RANDOMISE #####
+# calculating error dof
+# Number of cope images in the merged cope
+nCope = 10
+# Number of regressors in the design matrix
+nReg = 1
+# Degrees of freedom
+dof = nCope - nReg
+# converting p threshold to t threshold
+tUnc = scipy.stats.t.ppf(1-pUnc,dof)
 # actual permutation test with Randomise
 maskImg = os.path.join(statDir,'mask.nii.gz')
 outBase = os.path.join(permDir,'PermClus')  # directory and prefix for the output
 com_perm = 'randomise -i ' + cope4DImg
 com_perm += ' -o ' + outBase
 com_perm += ' -m ' + maskImg
-com_perm += ' -1 -n ' + str(nPerm) + ' -c ' + str(pUnc)
+com_perm += ' -1 -n ' + str(nPerm) + ' -c ' + str(tUnc)
 res = os.system(com_perm)
+
+# thresholding the t-image retaining only the signficant clusters
+# t-image to be thresholded
+tImg = os.path.join(permDir,'PermClus_tstat1.nii.gz')
+# thresholded t-image
+tFWEthImg = os.path.join(permDir,'Perm_thresh_clu_corrp05_uncorrp001_tstat1.nii.gz')
+# cluster size, FWE corrected
+cluFWE = 10
+com_clus = 'cluster --in=' + tImg
+com_clus += ' --thresh=' + str(tUnc)
+com_clus += ' --minextent=' + str(cluFWE)
+com_clus += ' --othresh=' + tFWEthImg
+res = os.system(com_clus)
