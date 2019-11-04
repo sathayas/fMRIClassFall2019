@@ -42,9 +42,9 @@ fdrThreshZImg = os.path.join(fdrDir,'FDRthresh_zstat' + contInd + '.nii.gz')
 
 # calculating error dof
 # Number of cope images in the merged cope
-nCope = 10
+nCope = 20
 # Number of regressors in the design matrix
-nReg = 1
+nReg = 11
 # Degrees of freedom
 dof = nCope - nReg
 
