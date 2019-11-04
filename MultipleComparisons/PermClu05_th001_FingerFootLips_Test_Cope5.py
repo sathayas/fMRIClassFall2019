@@ -88,3 +88,34 @@ com_clus += ' --thresh=' + str(tUnc)
 com_clus += ' --minextent=' + str(cluFWE)
 com_clus += ' --othresh=' + tFWEthImg
 res = os.system(com_clus)
+
+
+
+##### OVERLAY OF SIGNIFICANT BLOBS #####
+# T1 weighted image for background
+anatDir = os.path.join(dataDir,'derivatives_selected/fmriprep/sub-09/anat/')
+imageT1 = os.path.join(anatDir,
+                       'sub-09_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz')
+
+# Thresholded tstat image
+thImageStat=nib.load(tFWEthImg)
+
+# global maximum cooridnates
+X_zstat = thImageStat.get_data()  # loading the thresholded zstat image
+globalMax = np.unravel_index(np.argmax(X_zstat), X_zstat.shape) # voxel space
+globalMaxMNI = coord_transform(globalMax[0],
+                               globalMax[1],
+                               globalMax[2],
+                               thImageStat.affine)  # MNI space
+
+# blob overlay at global max
+plot_stat_map(thImageStat, bg_img=imageT1,
+              colorbar=True, black_bg=True,
+              draw_cross=True,
+              cut_coords=globalMaxMNI)
+
+# interactive visualization
+view_img(thImageStat, bg_img=imageT1, cmap='black_red',
+         symmetric_cmap=False, annotate=True,
+         colorbar=True, black_bg=True,
+         cut_coords=globalMaxMNI)
