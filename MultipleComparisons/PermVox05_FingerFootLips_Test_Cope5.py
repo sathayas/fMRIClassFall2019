@@ -9,6 +9,8 @@ from nilearn.image import math_img, coord_transform
 contInd = '5'
 # the session of interest
 indSes = 'test'
+# number of permutations
+nPerm = 1000
 
 ##### DIRECTORY BUSINESS ######
 # original data directory
@@ -39,7 +41,7 @@ for iSubj in subject_list:
                             'ses-' + indSes,
                             'run0.feat',
                             'stats',
-                            'cope' + indCope + '.nii.gz')
+                            'cope' + contInd + '.nii.gz')
     listCopeFiles.append(pathCope)
 
 # merged 4D cope image
@@ -50,3 +52,11 @@ com_merge = 'fslmerge -t ' + cope4DImg
 for iCope in listCopeFiles:
     com_merge += ' ' + iCope
 res = os.system(com_merge)
+
+
+##### PERMUTATION TEST WITH RANDOMISE #####
+maskImg = os.path.join(statDir,'mask.nii.gz')
+com_perm = 'randomise -i ' + cope4DImg + '-o Perm '
+com_perm += '-m ' + maskImg
+com_perm += '-1 -n ' + str(nPerm) + ' -x'
+res = os.system(com_perm)
