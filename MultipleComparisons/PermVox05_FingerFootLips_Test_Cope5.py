@@ -42,5 +42,11 @@ for iSubj in subject_list:
                             'cope' + indCope + '.nii.gz')
     listCopeFiles.append(pathCope)
 
+# merged 4D cope image
+cope4DImg = os.path.join(permDir,'cope' + contInd + '_4D.nii.gz')
+
 # FSL shell command to merge all cope images
-fdrPImg = os.path.join(fdrDir,'FDRp' + contInd + '.nii.gz') # FDR-corrected P image
+com_merge = 'fslmerge -t ' + cope4DImg
+for iCope in listCopeFiles:
+    com_merge += ' ' + iCope
+res = os.system(com_merge)
