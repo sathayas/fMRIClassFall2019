@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler
 iris = datasets.load_iris()
 X = iris.data    # Data
 y = iris.target  # Target i.e., true clusters
+varNames = iris.feature_names  # variable names
 nVar = X.shape[1]  # number of features
 
 # plotting the data
