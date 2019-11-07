@@ -34,5 +34,10 @@ yNorm_clus = kmNorm.labels_   # clustering info resulting from K-means
 
 
 # ARI
-print('ARI (raw)=  %6.4' % adjusted_rand_score(y, yRaw_clus))
-print('ARI (norm)=  %6.4' % adjusted_rand_score(y, yNorm_clus))
+print('ARI (raw)=  %7.4f' % adjusted_rand_score(y, yRaw_clus))
+print('ARI (norm)=  %7.4f' % adjusted_rand_score(y, yNorm_clus))
+
+
+# AMI
+print('AMI (raw)=  %7.4f' % adjusted_mutual_info_score(y, yRaw_clus))
+print('AMI (norm)=  %7.4f' % adjusted_mutual_info_score(y, yNorm_clus))
