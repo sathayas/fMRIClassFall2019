@@ -10,20 +10,29 @@ iris = datasets.load_iris()
 X = iris.data    # Data
 y = iris.target  # Target i.e., true clusters
 varNames = iris.feature_names  # variable names
+targetNames = iris.target_names  # names of irises
 nVar = X.shape[1]  # number of features
+
+
 
 # plotting the data
 plt.figure(figsize=[6, 6])
 
 # generating subplots
+y_set = list(set(y))
+c_points = ['b.','r.','g.']
 for iRow in range(nVar-1):  # subplot row index
     for iCol in range(iRow+1, nVar):  # subplot column index
         indPlot = (nVar-1)*iRow + iCol
         plt.subplot(nVar-1, nVar-1, indPlot)
-        plt.plot(X[:,iCol], X[:,iRow], 'b.')
+        for iIris in y_set:
+            plt.plot(X[y==iIris,iCol], X[y==iIris,iRow],
+                     c_points[iIris], label=targetNames[iIris])
         if iCol==iRow+1:
             plt.xlabel(varNames[iCol])
             plt.ylabel(varNames[iRow])
+        if iRow==(nVar-2) and iCol==(nVar-1):
+            plt.legend()
 
 # adjusting the space between subplots
 plt.subplots_adjust(wspace=0.35, hspace=0.35)
