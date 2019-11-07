@@ -59,6 +59,8 @@ kNN5.fit(X,y)
 
 
 # decision boundary
+from DecisionBoundary import plot_contours
+
 plt.figure(figsize=[6,6])
 ax = plt.subplot(111)
 plot_contours(ax, kNN5, X[:, 0], X[:, 1],
