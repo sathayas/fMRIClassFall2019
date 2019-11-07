@@ -1,9 +1,9 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn import datasets
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
 
 
 # Loading the iris data
@@ -14,65 +14,25 @@ varNames = iris.feature_names  # variable names
 targetNames = iris.target_names  # names of irises
 nVar = X.shape[1]  # number of features
 
-
-# characteristics of features
-pd.DataFrame(X_raw, columns=varNames).describe()
-
 # standardizing the features
 irisNorm = StandardScaler().fit(X_raw)  # learning standardization
 X = irisNorm.transform(X_raw)  # transforming the raw features
 
-# characteristics of normalized features
-pd.DataFrame(X, columns=varNames).describe()
 
 
-# plotting the data
-plt.figure(figsize=[6, 6])
-
-# generating subplots
-y_set = list(set(y))
-c_points = ['b.','r.','g.']
-for iRow in range(nVar-1):  # subplot row index
-    for iCol in range(iRow+1, nVar):  # subplot column index
-        indPlot = (nVar-1)*iRow + iCol
-        plt.subplot(nVar-1, nVar-1, indPlot)
-        for iIris in y_set:
-            plt.plot(X[y==iIris,iCol], X[y==iIris,iRow],
-                     c_points[iIris], label=targetNames[iIris])
-        if iCol==iRow+1:
-            plt.xlabel(varNames[iCol])
-            plt.ylabel(varNames[iRow])
-        if iRow==(nVar-2) and iCol==(nVar-1):
-            plt.legend()
-
-# adjusting the space between subplots
-plt.subplots_adjust(wspace=0.35, hspace=0.35)
-plt.show()
-
-
-
-# K-means clustering
+# K-means clustering, raw data
 numClus = 3  # number of clusters
-km = KMeans(n_clusters=numClus)  # defining the clustering object
-km.fit(X)  # actually fitting the data
-y_clus = km.labels_   # clustering info resulting from K-means
-y_cent = km.cluster_centers_  # centroid coordinates
+kmRaw = KMeans(n_clusters=numClus)  # defining the clustering object
+kmRaw.fit(X_raw)  # actually fitting the data
+yRaw_clus = kmRaw.labels_   # clustering info resulting from K-means
 
-### plotting the clusters
-plt.figure(figsize=[8,4])
-# First, results from K-means
-plt.subplot(121)
-plt.scatter(X[:,3],X[:,0],c=y_clus,marker='+')
-plt.plot(y_cent[:,3],y_cent[:,0],'r^')  # Ploting centroids
-plt.xlabel('Petal width')
-plt.ylabel('Sepal length')
-plt.title('Clusters from K-means')
 
-# As a comparison, the true clusters
-plt.subplot(122)
-plt.scatter(X[:,3],X[:,0],c=y,marker='+')
-plt.xlabel('Petal width')
-plt.ylabel('Sepal length')
-plt.title('True clusters')
+# K-means clustering, normalized data
+kmNorm = KMeans(n_clusters=numClus)  # defining the clustering object
+kmNorm.fit(X)  # actually fitting the data
+yNorm_clus = kmNorm.labels_   # clustering info resulting from K-means
 
-plt.show()
+
+# ARI
+print('ARI (raw)=  %6.4' % adjusted_rand_score(y, yRaw_clus))
+print('ARI (norm)=  %6.4' % adjusted_rand_score(y, yNorm_clus))
