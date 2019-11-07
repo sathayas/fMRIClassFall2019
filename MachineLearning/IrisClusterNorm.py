@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn import datasets
@@ -7,12 +8,22 @@ from sklearn.preprocessing import StandardScaler
 
 # Loading the iris data
 iris = datasets.load_iris()
-X = iris.data    # Data
+X_raw = iris.data    # Data
 y = iris.target  # Target i.e., true clusters
 varNames = iris.feature_names  # variable names
 targetNames = iris.target_names  # names of irises
 nVar = X.shape[1]  # number of features
 
+
+# characteristics of features
+pd.DataFrame(X_raw, columns=varNames).describe()
+
+# standardizing the features
+irisNorm = StandardScaler().fit(X_raw)  # learning standardization
+X = irisNorm.transform(X_raw)  # transforming the raw features
+
+# characteristics of normalized features
+pd.DataFrame(X, columns=varNames).describe()
 
 
 # plotting the data
