@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.svm import SVC
-from DecisionBounary import plot_svm_margin
+from DecisionBoundary import plot_svm_margin
 
 # producing a toy data set: two clusters, with some overlap
 X, y = make_blobs(n_samples=100, centers=2,
