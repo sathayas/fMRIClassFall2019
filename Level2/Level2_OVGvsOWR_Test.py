@@ -7,7 +7,7 @@ from nipype.interfaces.io import DataSink  # datasink
 
 
 ##### PARAMETERS #####
-indCope = '7'  # the contrast of interest, finger vs others
+indCope = '1'  # the contrast of interest, activation for both OVG and OWR
 
 
 ##### DIRECTORY BUSINESS ######
@@ -23,49 +23,55 @@ outDir = os.path.join(dataDir,'WorkflowOutput')
 # A LIST OF COPE, VARCOPE, AND MASK FILES TO BE MEREGED
 #
 ###########
-# directory where preprocessed fMRI data is located
-baseDir = os.path.join(dataDir, 'BatchOutput_FingerFootLips/feat_dir')
+# directories where preprocessed fMRI data is located
+baseOVGDir = os.path.join(dataDir, 'BatchOutput_OvertVerbGeneration/feat_dir')
+baseOWRDir = os.path.join(dataDir, 'BatchOutput_OvertWordRepetition/feat_dir')
+baseDir = [baseOVGDir, baseOWRDir]
 
 # a list of subjects
 subject_list = ['%02d' % i for i in range(1,11)]
 
-# a list of sessions
-ses_list = ['test', 'retest']
+# a list of task
+task_list = ['overtverbgeneration', 'overtwordrepetition']
+
+# session of interest
+indSes = 'test'
+
 
 # ininitializing lists to record file paths, subject ID, sessions
 listCopeFiles = []
 listVarcopeFiles = []
 listMaskFiles = []
 varSubj = []   # recording subject IDs
-varSes = []    # recording sessions
+varTask = []    # recording tasks
 for iSubj in subject_list:
-    for iSes in ses_list:
+    for i,iTask in enumerate(task_list):
         # recording subject ID and session
         varSubj.append(iSubj)
-        varSes.append(iSes)
+        varTask.append(iTask)
 
         # full path to a cope image
-        pathCope = os.path.join(baseDir,
+        pathCope = os.path.join(baseDir[i],
                                 'sub-' + iSubj,
-                                'ses-' + iSes,
+                                'ses-' + indSes,
                                 'run0.feat',
                                 'stats',
                                 'cope' + indCope + '.nii.gz')
         listCopeFiles.append(pathCope)
 
         # full path to a varcope image
-        pathVarcope = os.path.join(baseDir,
+        pathVarcope = os.path.join(baseDir[i],
                                 'sub-' + iSubj,
-                                'ses-' + iSes,
+                                'ses-' + indSes,
                                 'run0.feat',
                                 'stats',
                                 'varcope' + indCope + '.nii.gz')
         listVarcopeFiles.append(pathVarcope)
 
         # full path to a mask image
-        pathMask = os.path.join(baseDir,
+        pathMask = os.path.join(baseDir[i],
                                 'sub-' + iSubj,
-                                'ses-' + iSes,
+                                'ses-' + indSes,
                                 'run0.feat',
                                 'mask.nii.gz')
         listMaskFiles.append(pathMask)
@@ -77,12 +83,12 @@ for iSubj in subject_list:
 #
 ###########
 # creating a data frame for second-level analysis design matrix
-expData = pd.DataFrame(list(zip(varSubj, varSes)),
-                        columns=['Subject','Session'])
+expData = pd.DataFrame(list(zip(varSubj, varTask)),
+                        columns=['Subject','Task'])
 
 # creating a dummy variable for sessions (test:1, retest:-1)
-expData['TestRetest'] = (expData.Session=='test').astype(int)
-expData['TestRetest'] -= (expData.Session=='retest').astype(int)
+expData['OVGvsOWR'] = (expData.Task=='overtverbgeneration').astype(int)
+expData['OVGvsOWR'] -= (expData.Task=='overtwordrepetition').astype(int)
 
 # creating dummy variables for subjects
 for iSubj in subject_list:
@@ -95,8 +101,8 @@ dictReg = expData[reg_list].to_dict('list')
 
 # Contrasts
 dummyZeros = [0] * len(subject_list)  # a list of n zeros (n=num of subj)
-cont01 = ['test>retest','T', reg_list, [1]+dummyZeros]
-cont02 = ['retest>test','T', reg_list, [-1]+dummyZeros]
+cont01 = ['OVG>OWR','T', reg_list, [1]+dummyZeros]
+cont02 = ['OWR>OVG','T', reg_list, [-1]+dummyZeros]
 
 contrastList = [cont01, cont02]
 
@@ -139,7 +145,7 @@ minmask = Node(fsl.MinImage(),
 
 # creating datasink to collect outputs
 datasink = Node(DataSink(base_directory=
-                         os.path.join(outDir,'FingerFootLips_TestVsRetest_Cope7')),
+                         os.path.join(outDir,'OVGvsOWR_Test')),
                 name='datasink')
 
 
