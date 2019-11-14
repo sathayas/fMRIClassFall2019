@@ -82,7 +82,7 @@ plt.legend()
 plt.show()
 
 
-# plotting the low dimension data (bottle, scissors and faces only)
+# plotting the low dimension data (bottle, scissors and face only)
 plt.figure(figsize=[9,9])
 targetColors=['red','gold','seagreen','blue','fuchsia',
               'orange','lime','cyan','salmon','navy']
