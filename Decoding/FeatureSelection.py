@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from nilearn import datasets
 from nilearn.input_data import NiftiMasker
 from sklearn.svm import SVC
-from sklearn.feature_selection import SelectFdr, SelectFwe, f_classif
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.feature_selection import SelectFdr,  f_classi
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
 from nilearn.plotting import plot_stat_map, view_img
 
