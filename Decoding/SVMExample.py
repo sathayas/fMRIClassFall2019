@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from nilearn import datasets
 from nilearn.input_data import NiftiMasker
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import confusion_matrix, classification_report
 
 
 ##### PARAMETERS
@@ -48,6 +51,44 @@ for i,iCat in enumerate(targetNames):
 
 
 ##### SELECTED STIMULI ONLY
-stimMask = targetData.labels.isin(['bottle', 'scissors', 'face'])
+targetNames = ['bottle', 'face', 'scissors']  # the ttims of interest
+stimMask = targetData.labels.isin(targetNames)  # indices for the stim of interest
 X = X_fMRI[stimMask]   # features (for selected stimuli only)
-y = np.array(targetData.labelInd)[stimMask]
+y = np.array(targetData.labelInd)[stimMask]  # labels
+
+
+
+##### SVM CLASSIFICATION  (LINEAR WITH C=1)
+# spliting the data into training and testing data sets
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size=0.25,
+                                                    random_state=0)
+
+# SVM model fitting
+sv = SVC(kernel='linear', C=1.0)
+sv.fit(X_train,y_train)
+
+# SVM classifier
+y_pred = sv.predict(X_test)   # predicted class
+
+# Confusion matrix
+print(confusion_matrix(y_test,y_pred))
+
+# classification report
+print(classification_report(y_test, y_pred, target_names=targetNames))
+
+
+
+###### SEARCHING THE OPTIMAL PARAMETERS
+# parameter space
+param = {'C': [10,1,0.1,0.01],
+         'kernel': ['rbf','poly','linear']}
+# classifier object (sans parameters)
+svm_grid = SVC()
+# grid search object
+grid = GridSearchCV(svm_grid, param, cv=5)
+grid.fit(X,y)
+# best combination
+print(grid.best_params_)
+# best score
+print(grid.best_score_)
