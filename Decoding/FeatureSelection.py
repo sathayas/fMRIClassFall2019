@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 from nilearn import datasets
 from nilearn.input_data import NiftiMasker
 from sklearn.svm import SVC
+from sklearn.feature_selection import SelectFdr, SelectFwe, f_classif
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import confusion_matrix, classification_report
-
+from nilearn.plotting import plot_stat_map
+from nilearn.image import mean_img
 ###### PARAMETERS
 TR = 2.5
 
@@ -46,10 +48,30 @@ for i,iCat in enumerate(targetNames):
 ###### MASKING FOR SELECTED STIMS
 targetNames = ['bottle', 'face', 'scissors']  # the ttims of interest
 stimMask = targetData.labels.isin(targetNames)  # indices for the stim of interest
-X = X_fMRI[stimMask]   # features (for selected stimuli only)
+X_fMRI_selected = X_fMRI[stimMask]   # features (for selected stimuli only)
 y = np.array(targetData.labelInd)[stimMask]  # labels
 
 
+
+
 ###### FEATURE SELECTION
+# FDR feature selector
+selector = SelectFdr(f_classif, alpha=0.01)  # FDR selector object
+selector.fit(X_fMRI_selected, y)   # learning from the data
+X = selector.transform(X_fMRI_selected)   # Selected features only
+indVoxels = selector.get_support(indices=True)   # indices of surviving voxels
+
+
 ###### VISUALIZING FEATURE LOCATIONS
+# binary vector with 1s indicating selected voxels
+bROI = np.zeros(X_fMRI.shape[-1])
+bROI[indVoxels] = 1
+# reverse masking
+bROI_img = masker.inverse_transform(bROI)
+
+# Create the figure
+plot_stat_map(bROI_img, imgAnat, title='Voxels surviving FDR')
+
+
+
 ###### SVM CLASSIFIER
