@@ -7,8 +7,10 @@ from sklearn.svm import SVC
 from sklearn.feature_selection import SelectFdr, SelectFwe, f_classif
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import confusion_matrix, classification_report
-from nilearn.plotting import plot_stat_map
-from nilearn.image import mean_img
+from nilearn.plotting import plot_stat_map, view_img
+
+
+
 ###### PARAMETERS
 TR = 2.5
 
@@ -74,4 +76,35 @@ plot_stat_map(bROI_img, imgAnat, title='Voxels surviving FDR')
 
 
 
-###### SVM CLASSIFIER
+##### SVM CLASSIFICATION  (LINEAR WITH C=1)
+# spliting the data into training and testing data sets
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size=0.25,
+                                                    random_state=0)
+
+# SVM model fitting
+sv = SVC(kernel='linear', C=1.0)
+sv.fit(X_train,y_train)
+
+# SVM classifier
+y_pred = sv.predict(X_test)   # predicted class
+
+# Confusion matrix
+print(confusion_matrix(y_test,y_pred))
+
+# classification report
+print(classification_report(y_test, y_pred, target_names=targetNames))
+
+
+
+##### VISUALIZIN WEIGHTS
+coef = np.zeros(X_fMRI.shape[-1])  # empty zero vector initialization
+coef[indVoxels] = sv.coef_.sum(axis=0)  # sum of weights across OVR comparisons
+coef_img = masker.inverse_transform(coef)  # coef in fMRI space
+
+# Create the figure
+plot_stat_map(coef_img, imgAnat, title='SVM Weights')
+
+# interactive visualization
+view_img(coef_img, bg_img=imgAnat, cmap='black_red',
+         annotate=True, colorbar=True, black_bg=True,)
