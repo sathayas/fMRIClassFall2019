@@ -6,7 +6,7 @@ from nilearn.input_data import NiftiMasker
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import confusion_matrix, classification_report
-
+from nilearn.plotting import plot_stat_map
 
 ##### PARAMETERS
 TR = 2.5
@@ -92,3 +92,33 @@ grid.fit(X,y)
 print(grid.best_params_)
 # best score
 print(grid.best_score_)
+
+
+
+
+####### REVISED SVM WITH THE WINNING COMBINATION
+# SVM model fitting
+sv = SVC(kernel='linear', C=10)
+sv.fit(X_train,y_train)
+
+# SVM classifier
+y_pred = sv.predict(X_test)   # predicted class
+
+# Confusion matrix
+print(confusion_matrix(y_test,y_pred))
+
+# classification report
+print(classification_report(y_test, y_pred, target_names=targetNames))
+
+
+
+
+####### VISUALIZING WEIGHTS
+coef = sv.coef_   # coefficients for classifier weights
+w = (coef**2.sum(axis=0))**0.5  # squared sum across comparisons
+
+# inverse transformation of weights to the original voxel space
+w_img = masker.inverse_transform(w)
+
+# visualizing the weight image
+plot_stat_map(w_img, bg_img=imgAnat, title="SVM weights")
