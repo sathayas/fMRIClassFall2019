@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from nilearn import datasets
 from nilearn.input_data import NiftiMasker
 from sklearn.svm import SVC
-from sklearn.feature_selection import SelectFdr,  f_classi
+from sklearn.feature_selection import SelectFdr,  f_classif
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
 from nilearn.plotting import plot_stat_map, view_img
@@ -99,7 +99,7 @@ print(classification_report(y_test, y_pred, target_names=targetNames))
 
 ##### VISUALIZIN WEIGHTS
 coef = np.zeros(X_fMRI.shape[-1])  # empty zero vector initialization
-coef[indVoxels] = sv.coef_.sum(axis=0)  # sum of weights across OVR comparisons
+coef[indVoxels] = ((sv.coef_**2).sum(axis=0))**0.5  # sum of weights across OVR comparisons
 coef_img = masker.inverse_transform(coef)  # coef in fMRI space
 
 # Create the figure
