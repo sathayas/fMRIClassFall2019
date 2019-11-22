@@ -6,6 +6,7 @@ from nilearn.plotting import plot_roi, plot_img
 from nilearn.input_data import NiftiMasker
 from nilearn.image import new_img_like, load_img, index_img, mean_img
 from nilearn.decoding import SearchLight
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import KFold
 
 
@@ -43,11 +44,11 @@ imgfMRIDetrend = detrend.inverse_transform(X_fMRI_detrend)
 
 ###### AREA TO FOCUS ON
 voxXmin = 6
-voxXmax = 20
-voxYmin = 16
-voxYmax = 26
-voxZmin = 27
-voxZmax = 32
+voxXmax = 34
+voxYmin = 15
+voxYmax = 30
+voxZmin = 25
+voxZmax = 33
 
 # loading mask image
 imgMask = load_img(haxby_dataset.mask)   # mask image object
@@ -88,13 +89,16 @@ X = index_img(imgfMRIDetrend, stimMask)   # selecting only the selected time poi
 
 
 
-###### SEARCHLIGHT WITH SVM
+###### SEARCHLIGHT WITH kNN
 cv = KFold(n_splits=5)   # cross-validation splitting object
 
+# k-nearest neighbors classifier object
+kNN = KNeighborsClassifier(15, weights='distance')
 # The radius is the one of the Searchlight sphere that will scan the volume
 searchlight = SearchLight(imgMask,  # mask image object
                           process_mask_img=imgBox,  # voxel block image object
                           radius=5.6,  # radius is 5.6
+                          estimator=kNN,
                           cv=cv)
 searchlight.fit(X, y)
 
