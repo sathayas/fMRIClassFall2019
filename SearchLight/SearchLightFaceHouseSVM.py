@@ -42,8 +42,8 @@ imgfMRIDetrend = detrend.inverse_transform(X_fMRI_detrend)
 
 
 ###### AREA TO FOCUS ON
-voxXmin = 6
-voxXmax = 20
+voxXmin = 21
+voxXmax = 34
 voxYmin = 16
 voxYmax = 26
 voxZmin = 27
