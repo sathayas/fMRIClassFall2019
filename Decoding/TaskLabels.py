@@ -41,14 +41,17 @@ def returnTask(t, TR, tableTask):
 
 
 # list of subjects to be included
-listSub = ['01', '02', '05', '06']
+#listSub = ['01', '02', '05', '06']
+listSub = ['09', '10']
 # list of sessions to be included
 listSes = ['test', 'retest']
 # handedness dictionary
-handDict = {'01':'Left',
-            '02':'Right',
-            '05':'Right',
-            '06':'Left'}
+# handDict = {'01':'Left',
+#             '02':'Right',
+#             '05':'Right',
+#             '06':'Left'}
+handDict = {'09':'Right',
+            '10':'Left'}
 
 # initializing lists to record labels
 colSub = []
@@ -93,4 +96,5 @@ tableTrain['Condition'] = colTask
 tableTrain['Label'] = colLabel
 tableTrain['NumLabel'] = colNumLabel
 
-tableTrain.to_csv('TaskInfo_Train.csv', index=False)
+#tableTrain.to_csv('TaskInfo_Train.csv', index=False)
+tableTrain.to_csv('TaskInfo_Test.csv', index=False)
