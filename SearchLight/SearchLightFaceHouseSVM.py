@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from nilearn import datasets
-from nilearn.plotting import plot_roi
+from nilearn.plotting import plot_roi, plot_img
 from nilearn.input_data import NiftiMasker
-from sklearn.decomposition import PCA
-from nilearn.image import new_img_like, load_img
+from nilearn.image import new_img_like, load_img, index_img, mean_img
+from nilearn.decoding import SearchLight
+from sklearn.model_selection import KFold
 
 
 
@@ -22,7 +23,6 @@ dataDir = '/tmp/Data'
 haxby_dataset = datasets.fetch_haxby(data_dir=dataDir)
 imgfMRI = haxby_dataset.func[0]   # fMRI data file
 imgAnat = haxby_dataset.anat[0]   # structural data file
-imgMask = haxby_dataset.mask   # ventral-temporal streaming mask
 tableTarget = haxby_dataset.session_target[0]  # session target table file
 
 
@@ -30,11 +30,11 @@ tableTarget = haxby_dataset.session_target[0]  # session target table file
 
 ###### AREA TO FOCUS ON
 voxXmin = 6
-voxXmax = 34
-voxYmin = 15
-voxYmax = 30
-voxZmin = 25
-voxZmax = 33
+voxXmax = 20
+voxYmin = 16
+voxYmax = 26
+voxZmin = 27
+voxZmax = 32
 
 # loading mask image
 imgMask = load_img(haxby_dataset.mask)   # mask image object
@@ -53,19 +53,6 @@ plt.show()
 
 
 
-###### LOADING AND MASKING IMAGE DATA
-
-# Masking the image data with mask, extracting voxels
-masker = NiftiMasker(mask_img=imgBox,
-                     standardize=True,
-                     detrend=True,
-                     high_pass=0.008, t_r=TR)
-# Extracting the voxel time series within the mask
-X_fMRI = masker.fit_transform(imgfMRI)
-
-
-
-
 ###### LOADING BEHAVIORAL DATA
 # loading the behavior data into a dataframe
 targetData = pd.read_csv(tableTarget, sep=' ')
@@ -81,5 +68,33 @@ for i,iCat in enumerate(targetNames):
 ###### MASKING FOR SELECTED STIMS
 targetNames = ['face', 'house']  # the stims of interest
 stimMask = targetData.labels.isin(targetNames)  # indices for the stim of interest
-X_fMRI_selected = X_fMRI[stimMask]   # features (for selected stimuli only)
 y = np.array(targetData.labelInd)[stimMask]  # labels
+X = index_img(imgfMRI, stimMask)   # selecting only the selected time points
+                                         # from the fMRI time series, creating a
+                                         # new image object
+
+
+
+###### SEARCHLIGHT WITH SVM
+cv = KFold(n_splits=5)   # cross-validation splitting object
+
+# The radius is the one of the Searchlight sphere that will scan the volume
+searchlight = SearchLight(imgMask,  # mask image object
+                          process_mask_img=imgBox,  # voxel block image object
+                          radius=5.6,  # radius is 5.6
+                          cv=cv)
+searchlight.fit(X, y)
+
+
+
+###### VISUALIZING THE SEARCHLIGHT RESULTS
+# mean fMRI image (i.e., fMRI image without time dimension)
+mean_fmri = mean_img(imgfMRI)
+# searchlight score image object
+searchlight_img = new_img_like(mean_fmri, searchlight.scores_)
+
+# Because scores are not a zero-center test statistics, we cannot use
+# plot_stat_map
+plot_img(searchlight_img, bg_img=imgAnat,
+         title="Searchlight", colorbar=True,
+         vmin=.42, cmap='hot', threshold=.5, black_bg=True)
