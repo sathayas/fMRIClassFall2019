@@ -23,8 +23,21 @@ dataDir = '/tmp/Data'
 haxby_dataset = datasets.fetch_haxby(data_dir=dataDir)
 imgfMRI = haxby_dataset.func[0]   # fMRI data file
 imgAnat = haxby_dataset.anat[0]   # structural data file
+imgMask = haxby_dataset.mask   # brain mask
 tableTarget = haxby_dataset.session_target[0]  # session target table file
 
+
+
+##### DETRENDING AND STANDARDIZING FMRI DATA
+# Masking the image data with mask, extracting voxels
+detrend = NiftiMasker(mask_img=imgMask,
+                     standardize=True,
+                     detrend=True,
+                     high_pass=0.008, t_r=TR)
+# Extracting the voxel time series within the mask
+X_fMRI_detrend = detrend.fit_transform(imgfMRI)
+# Transforming back to the original space to get an image object
+imgfMRIDetrend = detrend.inverse_transform(X_fMRI_detrend)
 
 
 
@@ -69,7 +82,7 @@ for i,iCat in enumerate(targetNames):
 targetNames = ['face', 'house']  # the stims of interest
 stimMask = targetData.labels.isin(targetNames)  # indices for the stim of interest
 y = np.array(targetData.labelInd)[stimMask]  # labels
-X = index_img(imgfMRI, stimMask)   # selecting only the selected time points
+X = index_img(imgfMRIDetrend, stimMask)   # selecting only the selected time points
                                          # from the fMRI time series, creating a
                                          # new image object
 
@@ -97,4 +110,4 @@ searchlight_img = new_img_like(mean_fmri, searchlight.scores_)
 # plot_stat_map
 plot_img(searchlight_img, bg_img=imgAnat,
          title="Searchlight", colorbar=True,
-         vmin=.42, cmap='hot', threshold=.5, black_bg=True)
+         vmin=.50, cmap='hot', threshold=.6, black_bg=True)
