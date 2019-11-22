@@ -109,5 +109,5 @@ searchlight_img = new_img_like(mean_fmri, searchlight.scores_)
 # Because scores are not a zero-center test statistics, we cannot use
 # plot_stat_map
 plot_img(searchlight_img, bg_img=imgAnat,
-         title="Searchlight", colorbar=True,
+         title="Searchlight with SVM", colorbar=True,
          vmin=.50, cmap='hot', threshold=.6, black_bg=True)
