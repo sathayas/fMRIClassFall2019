@@ -28,27 +28,24 @@ tableTarget = haxby_dataset.session_target[0]  # session target table file
 
 
 
-###### NEIGHBORHOOD AROUND A VOXEL (WITHIN VT AREA)
-voxX = 27
-voxY = 23
-voxZ = 30
-boxWidth = 5
-boxHalfWidth = np.floor(boxWidth/2).astype(int)  # half box width
+###### AREA TO FOCUS ON
+voxXmin = 6
+voxXmax = 34
+voxYmin = 15
+voxYmax = 30
+voxZmin = 25
+voxZmax = 33
 
 # loading mask image
 imgMask = load_img(haxby_dataset.mask)   # mask image object
 X_mask = imgMask.get_data().astype(np.int)   # mask image array
+X_box = np.zeros_like(X_mask)  # zero array, same size as X_mask
 
-# zero-ing voxels outside the box
-X_mask[:(voxX-boxHalfWidth),:,:] = 0
-X_mask[(voxX+boxHalfWidth+1):,:,:] = 0
-X_mask[:,:(voxY-boxHalfWidth),:] = 0
-X_mask[:,(voxY+boxHalfWidth+1):,:] = 0
-X_mask[:,:,:(voxZ-boxHalfWidth)] = 0
-X_mask[:,:,(voxZ+boxHalfWidth+1):] = 0
+# Voxels within the box are turned to one
+X_box[voxXmin:(voxXmax+1), voxYmin:(voxYmax+1), voxZmin:(voxZmax+1)] = 1
 
 # creating a new image object for the box
-imgBox = new_img_like(imgMask, X_mask)
+imgBox = new_img_like(imgMask, X_box)
 
 # Visualizing the mask, in relation to the anatomical
 plot_roi(imgBox, bg_img=imgAnat, cmap='Paired')
@@ -86,78 +83,3 @@ targetNames = ['face', 'house']  # the stims of interest
 stimMask = targetData.labels.isin(targetNames)  # indices for the stim of interest
 X_fMRI_selected = X_fMRI[stimMask]   # features (for selected stimuli only)
 y = np.array(targetData.labelInd)[stimMask]  # labels
-
-
-
-
-##### PLOTTING DIMENSION REDUCED DATA
-# PCA with largest 2 PCs
-fMRIpca = PCA(n_components=2)
-PC = fMRIpca.fit_transform(X_fMRI_selected)
-
-
-# plotting the low dimension data (bottle, scissors and face only)
-plt.figure(figsize=[9,9])
-plt.scatter(PC[:,0], PC[:,1], c=y)
-plt.xlabel('PC1')
-plt.ylabel('PC2')
-plt.show()
-
-
-
-
-
-
-###### NEIGHBORHOOD AROUND A VOXEL (OUTSIDE VT AREA)
-voxX = 30
-voxY = 15
-voxZ = 30
-
-# loading mask image
-imgMask = load_img(haxby_dataset.mask)   # mask image object
-X_mask = imgMask.get_data().astype(np.int)   # mask image array
-
-# zero-ing voxels outside the box
-X_mask[:(voxX-boxHalfWidth),:,:] = 0
-X_mask[(voxX+boxHalfWidth+1):,:,:] = 0
-X_mask[:,:(voxY-boxHalfWidth),:] = 0
-X_mask[:,(voxY+boxHalfWidth+1):,:] = 0
-X_mask[:,:,:(voxZ-boxHalfWidth)] = 0
-X_mask[:,:,(voxZ+boxHalfWidth+1):] = 0
-
-# creating a new image object for the box
-imgBox = new_img_like(imgMask, X_mask)
-
-# Visualizing the mask, in relation to the anatomical
-plot_roi(imgBox, bg_img=imgAnat, cmap='Paired')
-plt.show()
-
-
-
-###### LOADING AND MASKING IMAGE DATA
-
-# Masking the image data with mask, extracting voxels
-masker = NiftiMasker(mask_img=imgBox,
-                     standardize=True,
-                     detrend=True,
-                     high_pass=0.008, t_r=TR)
-# Extracting the voxel time series within the mask
-X_fMRI = masker.fit_transform(imgfMRI)
-# masking for selected stims
-X_fMRI_selected = X_fMRI[stimMask]   # features (for selected stimuli only)
-
-
-
-
-##### PLOTTING DIMENSION REDUCED DATA
-# PCA with largest 2 PCs
-fMRIpca = PCA(n_components=2)
-PC = fMRIpca.fit_transform(X_fMRI_selected)
-
-
-# plotting the low dimension data (bottle, scissors and face only)
-plt.figure(figsize=[9,9])
-plt.scatter(PC[:,0], PC[:,1], c=y)
-plt.xlabel('PC1')
-plt.ylabel('PC2')
-plt.show()
