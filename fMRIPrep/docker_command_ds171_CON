@@ -1,0 +1,75 @@
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control01; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control02; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control03; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control04; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control05; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control06; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control07; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control08; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control09; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control10; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control11; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control12; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control13; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control14; \
+docker run --rm -it  --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label control15
