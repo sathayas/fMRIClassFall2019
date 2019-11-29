@@ -101,7 +101,7 @@ templates = {'func': os.path.join(baseDir,
 
 # Create SelectFiles node
 sf = Node(SelectFiles(templates,
-                      raise_on_empty=True,
+                      raise_on_empty=False,
                       sort_filelist=True),
           name='sf')
 sf.iterables = [('subject_id', subject_list),
