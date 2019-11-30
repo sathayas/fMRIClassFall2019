@@ -1,0 +1,14 @@
+docker run --rm -it -d --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label 57; \
+docker run --rm -it -d --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label 64; \
+-v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115:/data:ro \
+-v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds115/derivatives:/out \
+poldracklab/fmriprep /data /out participant --participant-label 72
