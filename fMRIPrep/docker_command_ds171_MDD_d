@@ -1,5 +1,4 @@
-sleep 3h; \
-docker run --rm -it --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
+docker run --rm -it -d --privileged -e DOCKER_VERSION_8395080871=1.13.1 \
 -v /home/satoru/license.txt:/opt/freesurfer/license.txt:ro \
 -v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171:/data:ro \
 -v /home/satoru/Teaching/fMRI_Fall_2019/Data/ds171/derivatives:/out \
