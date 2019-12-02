@@ -14,7 +14,7 @@ tailT1w = '_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz'
 tailT1wMask = '_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz'
 
 # Directory where your data set resides.
-dataDir = '/tmp/Data/ds115'
+dataDir = '/tmp/Data/ds171'
 
 # directory where fmriprep results reside
 resDir = os.path.join(dataDir,'derivatives/fmriprep')
