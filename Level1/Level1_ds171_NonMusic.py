@@ -200,5 +200,5 @@ firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
 
 
 # running the workflow
-#firstLevel.run('MultiProc', plugin_args={'n_procs': 10})
-firstLevel.run()
+firstLevel.run('MultiProc', plugin_args={'n_procs': 15})
+#firstLevel.run()
