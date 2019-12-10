@@ -37,29 +37,24 @@ def TaskEvents(fileEvent):
                          )]
 
     ## Defining contrasts
-    cont01 = ['positive>tones',   'T', conditions, [0, 1, 0, -1]]
-    cont02 = ['negative>tones',   'T', conditions, [1, 0, 0, -1]]
-    cont03 = ['pos or neg',       'T', conditions, [0.5, 0.5, 0, -1]]
-    cont04 = ['positive>negative','T', conditions, [-1, 1, 0, 0]]
-    cont05 = ['negative>positive','T', conditions, [1, -1, 0, 0]]
-
-
-    contrast_list = [cont01, cont02, cont03, cont04, cont05]
+    cont01 = ['activation',       'T', conditions, [1]]
+    cont02 = ['deactivation',     'T', conditions, [-1]]
+    contrast_list = [cont01, cont02]
 
     return subject_info, contrast_list
 
 
-
 ##### PARAMETERS
-TR = 3.0
-taskName = 'nonmusic'
+TR = 2.5
+taskName = 'letter1backtask'
 
 
 ##### DIRECTORY BUSINESS ######
 # original data directory
-dataDir = '/tmp/Data/ds171'
+dataDir = '/tmp/Data/ds115'
 # Output directory
 outDir = os.path.join(dataDir,'BatchOutput_' + taskName)
+
 
 
 ###########
@@ -72,8 +67,7 @@ baseDir = os.path.join(dataDir, 'derivatives_selected/fmriprep')
 
 # list of values for the iterables
 subject_list = [x.replace('sub-','') for x in os.listdir(baseDir) if 'sub-' in x]
-subject_list.sort()
-run_list = ['1', '2', '3', '4', '5']
+
 
 # String template with {}-based strings
 templates = {'func': os.path.join(baseDir,
@@ -81,31 +75,25 @@ templates = {'func': os.path.join(baseDir,
                                   'func',
                                   ('sub-{subject_id}' +
                                    '_task-' + taskName +
-                                   '_run-{run_id}' +
                                    '_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz')),
              'mask': os.path.join(baseDir,
                                   'sub-{subject_id}',
                                   'func',
                                   ('sub-{subject_id}' +
                                    '_task-' + taskName +
-                                   '_run-{run_id}' +
-                                   '_space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz')),
+                                   '_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz')),
              'events': os.path.join(dataDir,
                                      'sub-{subject_id}',
                                      'func',
                                      ('sub-{subject_id}' +
                                       '_task-' + taskName +
-                                      '_run-{run_id}' +
                                       '_events.tsv'))
              }
 
 # Create SelectFiles node
-sf = Node(SelectFiles(templates,
-                      raise_on_empty=False,
-                      sort_filelist=True),
+sf = Node(SelectFiles(templates, sort_filelist=True),
           name='sf')
-sf.iterables = [('subject_id', subject_list),
-                ('run_id', run_list)]
+sf.iterables = [('subject_id', subject_list)]
 
 
 
@@ -168,9 +156,7 @@ datasink = Node(DataSink(base_directory=outDir),
                 name='datasink')
 
 ## Use the following DataSink output substitutions
-substitutions = [('_subject_id_', '/sub-'),
-                 ('_run_id_', '/run-')
-                 ]
+substitutions = [('_subject_id_', '/sub-')]
 
 datasink.inputs.substitutions = substitutions
 
@@ -200,5 +186,5 @@ firstLevel.connect(applymask, 'out_file', datasink, 'preproc_out_file')
 
 
 # running the workflow
-firstLevel.run('MultiProc', plugin_args={'n_procs': 15})
+firstLevel.run('MultiProc', plugin_args={'n_procs': 10})
 #firstLevel.run()
